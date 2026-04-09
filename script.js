@@ -156,7 +156,7 @@ window.onload = function () {
     document.getElementById("proceedBtn").classList.add("hidden");
     document.getElementById("proceedBtn").classList.remove("hidden");
   } else {
-    document.getElementById("resetBtn").classList.add("hidden");
+    document.getElementById("resetBtn").style.display = "none";
   }
 };
 
