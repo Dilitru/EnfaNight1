@@ -1,0 +1,321 @@
+<!DOCTYPE html>
+<!-- saved from url=(0055)https://enfamama-quiz-lj6i.vercel.app/leaderboards.html -->
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+  <title>Leaderboard</title>
+  <script src="./leaderboards_files/firebase-app-compat.js.download"></script>
+  <script src="./leaderboards_files/firebase-firestore-compat.js.download"></script>
+  <style>
+    /* Global text styling */
+    body {
+	  background-image: url("bg.png");
+    background-repeat: no-repeat;
+    background-size: cover;   /* stretch across width, keep height proportional */
+    background-position: center;
+
+	  font-family: 'Nunito', sans-serif;
+	  font-weight: bold;
+    display: flex;
+    justify-content: center;   /* horizontal centering */
+    align-items: center;       /* vertical centering */
+    height: 100vh;             /* full viewport height */
+    margin: 0;                 /* remove default body margin */
+    }
+
+
+
+    /* Buttons */
+    button {
+      background-color: white; /* bright red */
+      font-weight: bold;
+      color: #090680;
+      border: none;
+      border-radius: 25px; /* rounded */
+      padding: 2px 2px;
+      margin: 1px;
+      font-size: 16px;
+      cursor: pointer;
+      transition: background-color 0.3s ease;
+    }
+
+    button:hover {
+      background-color: lightblue;/* darker red on hover */
+    }
+
+
+#leaderboardWrapper {
+  background-color: #090680;     /* red background */
+  border-radius: 20px;       /* rounded corners */
+  padding: 20px;             /* space inside */
+  text-align: center;        /* center text/buttons inside */
+  color: white;              /* make text readable on red */
+  font-weight: bold;
+  width: flex;                /* responsive scaling */
+}
+
+#leaderboardWrapper button {
+  margin: 5px;
+  padding: 10px 20px;
+  font-size: 1em;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  height:flex;
+}
+
+#leaderboard {
+  width: 100%;
+  margin: 40px auto;
+  text-align: center;
+  font-family: Arial, sans-serif;
+}
+
+#leaderboard h2 {
+  color: white;
+  margin-bottom: 20px;
+  font-weight: bold;
+}
+
+#topTables {
+  display: flex;              /* horizontal layout */
+  flex-direction: column;
+  justify-content: space-around; /* spread evenly across screen */
+  align-items: center;
+}
+
+.top-entry {
+  background: white;
+  border: 2px solid #090680;
+  border-radius: 20px;
+  padding: 10px;
+  margin: 10px;
+  font-size: 20px;
+  font-weight: bold;
+  color: #090680;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+  min-width: 350px;           /* consistent card width */
+  text-align: left;           /* left-justify text inside */
+  
+}
+
+.logo {
+  width: 200px;   /* set a fixed width */
+  height: auto;   /* keep proportions */
+}
+
+.logo2 {
+ width:150px;
+ height: auto;
+}
+
+.hidden {
+  display: none;
+}
+
+#leaderboardList {
+  list-style: none;
+  padding: 0;
+  margin: 0 auto;          /* center the list horizontally */
+  width: 80%;              /* adjust width as needed */
+  max-width: 400px;
+}
+
+#leaderboardList li {
+  background-color: white;
+  color: #090680;
+  font-weight: bold;
+  text-align: center;
+  padding: 15px;
+  margin: 10px 0;
+  border-radius: 12px;     /* rounded corners */
+  box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+  font-size: 20px;
+}
+
+  </style>
+
+  <!-- Inter font import -->
+  <link href="./leaderboards_files/css2" rel="stylesheet">
+</head>
+
+<body>
+  <div id="leaderboardWrapper">
+
+  <img src="./leaderboards_files/DHAChallengeLogo.png" alt="Logo" class="logo">
+  <p style="font-size: 30px !important; transform: translateY(-50%)">Leaderboard</p>
+  <div>
+    <button onclick="markStatus(0)">Q1</button>
+	<button onclick="markStatus(1)">Q2</button>
+	<button onclick="markStatus(2)">Q3</button>
+	<button onclick="markStatus(3)">Q4</button>
+	<button onclick="markStatus(4)">Q5</button>
+	<button onclick="markStatus(5)">Q6</button>
+	<!-- New ALL button -->
+    <button onclick="showLeaderboardAll()">ALL</button>
+	<button id="lockAllBtn">🔒</button>
+
+  </div>
+  <div id="leaderboard">
+  <h2>Top 5 Tables</h2>
+  <div id="buttonPressedMessage" class="hidden">Question unlocked. 15 seconds until leaderboard results.</div>
+  <ul id="leaderboardList"></ul>
+  </div>
+</div>
+
+
+
+  <script>
+    // Firebase config
+    const firebaseConfig = {
+  apiKey: "AIzaSyCv6nPwgzTl7qDNSZ1MkpoGAOHyxpkKL4s",
+  authDomain: "quizapp-cf724.firebaseapp.com",
+  databaseURL: "https://quizapp-cf724-default-rtdb.asia-southeast1.firebasedatabase.app",
+  projectId: "quizapp-cf724",
+  storageBucket: "quizapp-cf724.firebasestorage.app",
+  messagingSenderId: "948696897116",
+  appId: "1:948696897116:web:8d8bf48e0b818ace0ef899",
+  measurementId: "G-MLNBNFC70Y"
+   };
+    firebase.initializeApp(firebaseConfig);
+    const db = firebase.firestore();
+	
+	
+//LEADERBOARD SYSTEM
+function markStatus(index) {
+  const statusRef = firebase.firestore().collection("status").doc("statusDoc");
+
+  statusRef.get().then(doc => {
+    if (doc.exists) {
+      const currentStatus = doc.data().status || [];
+
+      // Update only the chosen index
+      currentStatus[index] = true;
+
+      // Write the whole array back
+      return statusRef.update({ status: currentStatus });
+    } else {
+      console.error("statusDoc not found!");
+    }
+  })
+  .then(() => {
+    console.log(`Status for question ${index} updated to TRUE`);
+	document.getElementById("buttonPressedMessage").classList.remove("hidden");
+	showLeaderboardForQuestion(index + 1);
+  })
+  .catch(error => {
+    console.error("Error updating status:", error);
+  });
+}
+
+function showLeaderboardForQuestion(questionNumber) {
+  const typeString = String(questionNumber);
+
+  setTimeout(() => {
+    document.getElementById("buttonPressedMessage").classList.add("hidden");
+
+    firebase.firestore()
+      .collection("submissions")
+      .where("type", "==", typeString)   // filter by question type
+      .orderBy("timestamp", "asc")       // earliest first
+      .limit(50)                         // pull first 50 results
+      .get()
+      .then(snapshot => {
+        const leaderboardList = document.getElementById("leaderboardList");
+        leaderboardList.innerHTML = ""; // clear old entries
+
+        const seenTables = new Set();
+        const displayResults = [];
+
+        snapshot.forEach(doc => {
+          const data = doc.data();
+          if (!seenTables.has(data.tableNumber)) {
+            seenTables.add(data.tableNumber);
+            displayResults.push(data);
+          }
+        });
+
+        // Only show the first 5 unique tables
+        displayResults.slice(0, 5).forEach(entry => {
+          const li = document.createElement("li");
+          li.textContent = `Table ${entry.tableNumber}`;
+          leaderboardList.appendChild(li);
+        });
+
+        console.log(`Leaderboard updated for Question ${questionNumber}`);
+      })
+      .catch(error => {
+        console.error("Error fetching leaderboard:", error);
+      });
+  }, 15000); // wait 15 seconds
+}
+
+
+//RELOCK
+function lockAllQuestions() {
+  const statusRef = firebase.firestore().collection("status").doc("statusDoc");
+
+  statusRef.get().then(doc => {
+    if (doc.exists) {
+      const currentStatus = doc.data().status || [];
+
+      // Reset every index to false
+      const newStatus = currentStatus.map(() => false);
+
+      return statusRef.update({ status: newStatus });
+    } else {
+      console.error("statusDoc not found!");
+    }
+  })
+  .then(() => {
+    console.log("All questions locked (status array reset to false).");
+  })
+  .catch(error => {
+    console.error("Error locking all questions:", error);
+  });
+}
+
+// Attach to button
+document.getElementById("lockAllBtn").addEventListener("click", lockAllQuestions);
+
+function showLeaderboardAll() {
+  firebase.firestore()
+    .collection("submissions")
+    .get()
+    .then(snapshot => {
+      const counts = {};
+
+      // Count submissions per table
+      snapshot.forEach(doc => {
+        const data = doc.data();
+        const table = data.tableNumber;
+
+        if (!counts[table]) {
+          counts[table] = 0;
+        }
+        counts[table] += 1;
+      });
+
+      // Sort by submission count (descending) and take top 5
+      const sorted = Object.entries(counts)
+        .sort((a, b) => b[1] - a[1])
+        .slice(0, 5);
+
+      // Render leaderboard
+      const leaderboardList = document.getElementById("leaderboardList");
+      leaderboardList.innerHTML = "";
+
+      sorted.forEach(([table]) => {
+        const li = document.createElement("li");
+        li.textContent = `Table ${table}`;
+        leaderboardList.appendChild(li);
+      });
+
+      console.log("Leaderboard updated for ALL questions.");
+    })
+    .catch(error => {
+      console.error("Error fetching ALL leaderboard:", error);
+    });
+}
+
+  </script>
+
+</body></html>
