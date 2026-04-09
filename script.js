@@ -152,9 +152,11 @@ window.onload = function () {
   }
 
   if (debug == true) {
-    // document.getElementById("resetBtn").classList.remove("hidden");
+    //document.getElementById("resetBtn").classList.remove("hidden");
     document.getElementById("proceedBtn").classList.add("hidden");
     document.getElementById("proceedBtn").classList.remove("hidden");
+  } else {
+    document.getElementById("resetBtn").classList.add("hidden");
   }
 };
 
