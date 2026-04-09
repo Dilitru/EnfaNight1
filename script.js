@@ -64,7 +64,7 @@ const questions = [
 /*
 --- DEBUG MODE SWITCH---
 */
-let debug = true; //DEBUG MODE switch
+let debug = false; //DEBUG MODE switch
 
 /*
 --- Firebase setup ---
