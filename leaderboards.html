@@ -156,7 +156,7 @@
   </div>
   <div id="leaderboard">
   <h2>Top 5 Tables</h2>
-  <div id="buttonPressedMessage" class="hidden">Question unlocked. 10 seconds until leaderboard results.</div>
+  <div id="buttonPressedMessage" class="hidden">Loading...</div>
   <ul id="leaderboardList"></ul>
   </div>
 </div>
@@ -245,7 +245,7 @@ function showLeaderboardForQuestion(questionNumber) {
       .catch(error => {
         console.error("Error fetching leaderboard:", error);
       });
-  }, 50); // wait 15 seconds
+  }, 2000); // wait 15 seconds
 }
 
 
