@@ -267,7 +267,7 @@ function showLockedPage() {
       okBtn.textContent = "OK";
       okBtn.disabled = false; // enable after countdown
     }
-  }, 1000);
+  }, 50);
 }
 
 // Attach event listener to OK button
