@@ -1,133 +1,672 @@
-/* Event Logo Styling */
-#eventLogo {
-  position: fixed; /* stays on top even when scrolling */
-  top: 0;
-  left: 0;
-  width: 100%; /* full width container */
-  background-color: transparent; /* optional background for contrast */
-  text-align: center; /* center the logo image */
-  z-index: 1000; /* ensure it stays above other elements */
-  padding: 0px 0px; /* spacing around the logo */
-  margin-bottom: 100px;
-}
-
-#eventLogo img {
-  max-width: 400px; /* logo never exceeds 400px */
-  width: 100%; /* scales responsively up to 400px */
-  height: auto; /* keep aspect ratio */
-}
-
+/* Background: full-page, proportionally scaled */
 body {
-  min-height: 100vh; /* always at least full screen height */
-  /* background: linear-gradient(
-    to bottom,
-    #4167f0 0%,
-    #021c78 88%,
-    #010538 92%,
-    #4167f0 100%
-  ); */
-  background:url("bg.png");
+  margin: 0;
+  padding: 0;
+  font-family: 'Nunito', sans-serif;
+  background: url('background.jpg') no-repeat center center fixed;
+  background-size: cover; /* scales proportionally */
+  color: white;
+}
 
-  background-repeat: no-repeat; /* stop tiling */
-  background-attachment: fixed; /* lock gradient to viewport */
-  background-size: cover; /* stretch gradient to cover entire screen */
+/* Header logo: centered and scaled to 10% of viewport height */
+header {
+  text-align: center;
+  margin: 0;
+  padding: 30px 0px 0px 0px;
+}
+
+header img {
+  height: 10vh;        /* scales to 10% of viewport height */
+  width: auto;         /* keeps aspect ratio */
+  max-width: 90vw;     /* prevent it from overflowing horizontally */
+  object-fit: contain; /* ensures no stretching */
+  display: inline-block;
+}
+
+
+/* Card with fade-in */
+.card {
+  background: #04032e;
+  color: #fff;
+  border-radius: 12px;
+  box-shadow: 0 4px 8px rgba(0,0,0,0.3);
+  padding: 20px;
+  margin: 20px auto;
+  max-width: 500px;
+  opacity: 0;
+  animation: fadeIn 0.8s ease forwards;
+}
+
+/* Splash card with scrolling background */
+.splashCard {
+  position: relative;
+  width: 50vh !important;
+  height: 70vh !important;           /* card height = 70% of viewport */
+  margin: 40px auto !important;
+  border-radius: 16px;
+  box-shadow: 0 4px 8px rgba(0,0,0,0.3);
+  overflow: hidden;
+
+  background: url('splash-background.jpg') repeat-y center top;
+  background-size: cover;
+
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  color: white;
+  text-align: center;
+  animation: scrollBackground 60s linear infinite,
+             fadeIn 3s ease forwards;
+}
+
+/* Keyframes for infinite upward scroll */
+@keyframes scrollBackground {
+  from { background-position: center 0; }
+  to   { background-position: center 2000%; } /* scroll farther */
+}
+
+/* Image button base */
+button.image-button {
+  background: none;       /* no background */
+  border: none;           /* no border */
+  padding: 0;
+  margin-top: 20px;
+  cursor: pointer;
+  position: relative;
+  overflow: visible;
+}
+
+/* Remove browser focus/active background */
+button.image-button:focus,
+button.image-button:active {
+  outline: none;
+  background: none;
+}
+
+/* Image itself */
+button.image-button img {
+  display: block;
+  margin: 0 auto;
+  width: 250px;
+  height: auto;
+  pointer-events: none; /* click registers on button, not image */
+}
+
+/* Transparent ghost effect */
+button.image-button::after {
+  content: "";
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 100%;
+  height: 100%;
+  background: url('start-button.png') no-repeat center center;
+  background-size: contain;
+  opacity: 0;
+  transform: translate(-50%, -50%) scale(1);
+  pointer-events: none;
+}
+
+/* On click: show ghost, scale up, fade out */
+button.image-button:active::after {
+  opacity: 0.5;
+  transform: translate(-50%, -50%) scale(1.2);
+  animation: fadeOutScale 0.6s forwards;
+}
+
+/* Keyframes */
+@keyframes fadeOutScale {
+  to {
+    opacity: 0;
+    transform: translate(-50%, -50%) scale(1.5);
+  }
+}
+
+/* Keyframes for fade-out */
+@keyframes fadeOutScale {
+  to {
+    opacity: 0;
+    transform: translate(-50%, -50%) scale(1.5);
+  }
+}
+
+/* WaitPage card container */
+.waitPage {
+  position: relative;          /* allow overlap positioning */
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  max-width: 500px;
+  margin: 0px 0px 0px 0px; 
+  padding: 0px 0px 0px;
+  opacity: 0;
+  animation: fadeIn 1s ease forwards;
+  background-color: transparent;
+  border-radius: 0px;
+}
+
+/* Top section: full image, no padding/border */
+.waitTop {
+  height: 400px; /* or use 40vh for responsive height */
+  background: url('wait-image.png') no-repeat center center;
+  background-size: cover;   /* fills the whole area */
+  margin: 0px 0px 0px 0px;
+  padding: 0px 0px 0px 0px;
+  border: none;
+  border-radius: 12px;
+}
+
+/* Brainflix logo overlaps both sections */
+.waitLogo {
+  position: absolute;
+  top: 58%;                    /* halfway down card */
+  left: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 2;                  /* above both sections */
+}
+.waitLogo img {
+  max-width: 125px;
+  height: auto;
+  display: block;
+}
+
+/* Bottom section */
+.waitBottom {
+  background: #04032e;
+  color: #fff;
+  padding: 60px 20px 20px;      /* extra top padding so logo doesn’t overlap text */
+  text-align: center;
+}
+
+/* Yes Play Button */
+button.yesPlayButton {
+  background: none;
+  border: none;
+  padding: 0;
+  margin-top: 20px;
+  cursor: pointer;
+  position: relative;
+  overflow: visible;
+  max-width: 400px;
+}
+
+button.yesPlayButton:focus,
+button.yesPlayButton:active {
+  outline: none;
+  background: none;
+}
+
+button.yesPlayButton img {
+  display: block;
+  margin: 0 auto;
+  width: 15vh;
+  height: auto;
+  pointer-events: none;
+  transition: transform 0.2s ease;
+}
+
+/* Hover effect */
+button.yesPlayButton:hover img {
+  transform: scale(1.05);
+}
+
+/* Ghost effect */
+button.yesPlayButton::after {
+  content: "";
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 100%;
+  height: 100%;
+  background: url('yes-button.png') no-repeat center center;
+  background-size: contain;
+  opacity: 0;
+  transform: translate(-50%, -50%) scale(1);
+  pointer-events: none;
+}
+
+/* On click: ghost expands, holds, fades */
+button.yesPlayButton:active::after {
+  opacity: 0.5;
+  animation: ghostExpandFade 1s forwards;
+}
+
+@keyframes ghostExpandFade {
+  0% {
+    opacity: 0.5;
+    transform: translate(-50%, -50%) scale(1.2);
+  }
+  50% {
+    opacity: 0.5;
+    transform: translate(-50%, -50%) scale(1.3);
+  }
+  100% {
+    opacity: 0;
+    transform: translate(-50%, -50%) scale(1.5);
+  }
+}
+
+/* Fade-in animation reused from splash card */
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(20px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+/*END OF WAIT PAGE*/
+
+
+/*-----------------------*/
+/*     QUESTION CARD     */
+/*-----------------------*/
+/* Question Card container */
+.questionCard {
+	margin: 20px auto;
+  display: flex;
+  flex-direction: column;
+  max-width: 500px !important;
+  overflow: hidden;
+  box-shadow: 0 4px 8px rgba(0,0,0,0.3);
+  animation: fadeIn 0.8s ease forwards;
+  padding: 0px !important;
+  opacity: 0;
+  border-radius: 15px;
+  background-color: transparent;
+}
+
+/* Top section */
+.questionSection {
+  background: url("background-2.jpg") no-repeat center center;
+  background-size: cover;
+  text-align: center;
+  padding: 20px;  
+}
+.questionLogo {
+  max-width: 90px;
+  height: auto;
+  display: block;
+  margin: 0 auto 10px;
+}
+.questionText {
+  color: #fff;
+  font-size: 1.3rem; /* slightly bigger than body text */
+  margin: 0;
+}
+
+/* Bottom section */
+.answerSection {
+  background-color: #04032e;
+  text-align: center;
+  padding: 20px;
+  border-radius: 15px;
+}
+.answerButton {
+  background: none;
+  border: none;
+  padding: 0;
+  margin: 10px auto;
+  cursor: pointer;
+  display: block;
+  max-width: 200px;
+  position: relative;
+}
+.answerButton img {
+  width: 80%;
+  height: auto;
+  display: block;
+  margin: 8px;
+  pointer-events: none;
+  transition: transform 0.2s ease;
+}
+.answerButton:hover img {
+  transform: scale(1.05);
+}
+
+/* Ghost press effect (same as yesPlayButton earlier) */
+.answerButton::after {
+  content: "";
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 100%;
+  height: 100%;
+  background-size: contain;
+  background-repeat: no-repeat;
+  background-position: center;
+  opacity: 0;
+  transform: translate(-50%, -50%) scale(1);
+  pointer-events: none;
+}
+.yesButton::after {
+  background-image: url('yes-button.png');
+}
+.noButton::after {
+  background-image: url('no-button.png');
+}
+.answerButton:active::after {
+  opacity: 0.5;
+  animation: ghostExpandFade 1s forwards;
+}
+
+@keyframes ghostExpandFade {
+  0% { opacity: 0.5; transform: translate(-50%, -50%) scale(1.2); }
+  50% { opacity: 0.5; transform: translate(-50%, -50%) scale(1.3); }
+  100% { opacity: 0; transform: translate(-50%, -50%) scale(1.5); }
+}
+
+/* Instruction text */
+.answerInstruction {
+  color: #fff;
+  margin-top: 15px;
+  font-size: 0.9rem;
+}
+
+/* Fade-in animation */
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(20px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+/*END OF QUESTION CARD*/
+
+/*-----------------------*/
+/* ANSWER SUBMITTED CARD */
+/*-----------------------*/
+/* Answer Submitted Card container */
+.card.answerSubmittedCard {
+  position: relative;
+  background-color: #0a1591;
+  flex-direction: column;
+  max-width: 350px;
+  margin: 20px auto;
+  border-radius: 12px;
+  padding: 0px !important;
+  overflow: hidden;
+  box-shadow: 0 4px 8px rgba(0,0,0,0.3);
+  opacity: 0;
+  animation: fadeIn 1s ease forwards;
+}
+
+/* Top section (background image optional) */
+.submittedTop {
+  height: 350px;
+  background: url('answerSubmitted-image.jpg') no-repeat center center;
+  background-size: cover;
+}
+
+/* Logo overlapping */
+.submittedLogo {
+  position: absolute;
+  top: 60%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 2;
+}
+.submittedLogo img {
+  max-width: 130px;
+  height: auto;
+  display: block;
+}
+
+/* Bottom section */
+.submittedBottom {
+	background-color:transparent;
+  color: #fff;
+  padding: 50px 20px 20px;
+  text-align: center;
+}
+
+/* Proceed Button (regular button) */
+.proceedButton {
+  background-color: #8f98ff; /* light blue to stand out */
+  color: #fff;
+  border: none;
+  border-radius: 8px;
+  padding: 10px 24px;
+  margin-top: 20px;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: background-color 0.2s ease, transform 0.2s ease;
+}
+.proceedButton:hover {
+  background-color: #6c74d9;
+  transform: scale(1.05);
+}
+.proceedButton:active {
+  background-color: #555cc0;
+  transform: scale(0.98);
+}
+
+/* Fade-in animation */
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(20px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+/*END OF ANSWER SUBMITTED CARD*/
+
+/*-----------------*/
+/* COMMITMENT CARD */
+/*-----------------*/
+/* Commitment Card container */
+.commitmentCard {
+  background-color: #2c2c2c; /* dark grey */
+  max-width: 200px !important;          /* slim */
+  margin: 20px auto !important;
+  border-radius: 25px;
+  box-shadow: 0 4px 8px rgba(0,0,0,0.3);
   display: flex;
   flex-direction: column;
   align-items: center;
-  font-family: "Nunito", sans-serif;
-  margin-top: 150px;
-  padding: 20px;
-  text-align: center;
+  padding: 20px 10px;
+  color: #fff;
 }
 
-button {
-  font-size: 1.2em; /* scales with screen */
+/* Top section */
+.commitTop {
+  margin-bottom:0px;
+}
+.fakeButton {
+  font-size: 2rem;
+  margin: 0 10px;
+  cursor: default;
+}
+
+/* Middle section: real button */
+.commitMiddle {
+  margin: 0px 0;
+  margin-bottom:60px;
   padding: 20px;
+}
+.commitmentYesButton {
+  background: none;
   border: none;
-  border-radius: 8px;
-  background-color: #fbecb9;
-  color: #001b7f;
-  font-weight: bold;
-}
-
-/* Card Styling */
-.card {
-  background-color: #001b7f; /* white background */
-  color: white;
-  border-radius: 12px; /* rounded edges */
-  padding: 20px; /* inner spacing */
-  margin: 20px auto; /* spacing around card, centered */
-  max-width: 500px; /* optional width limit */
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* subtle shadow for depth */
-}
-
-.intro-card {
-  color: white;
-  background-color: #100679; /* white background */
-  border-radius: 12px; /* rounded edges */
-  padding: 20px; /* inner spacing */
-  margin: 20px auto; /* spacing around card, centered */
-  max-width: 500px; /* optional width limit */
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* subtle shadow for depth */
-}
-
-/* App Logo Styling */
-.app-logo {
-  max-width: 120px; /* never go past 150px */
-  width: 100%; /* scale down responsively */
-  height: auto; /* keep aspect ratio */
-  display: block; /* ensures proper spacing */
-  margin: 0 auto; /* center horizontally */
-}
-
-#letterButtons button {
-  margin: 5px; /* space around each button */
-  padding: 10px 15px; /* make them bigger and easier to click */
-  font-size: 18px; /* larger text for clarity */
-  border-radius: 6px; /* rounded corners for nicer look */
   cursor: pointer;
+  width: 200px;
+  height: 200px;
+  position: relative;
+}
+.commitmentYesButton img {
+  width: 100%;
+  height: auto;
+  display: block;
+  animation: none;
 }
 
-#letterButtons {
+.commitmentYesButton.clicked img {
+  animation: spinGrow 0.5s ease forwards; /* adjust duration here */
+}
+
+@keyframes spinGrow {
+  from { transform: rotate(0deg) scale(1); }
+  to   { transform: rotate(360deg) scale(1.4); }
+}
+
+
+/* Bottom section */
+.commitBottom {
+  margin-top: 0px;
   display: flex;
-  flex-wrap: wrap; /* allow wrapping if too many letters */
-  gap: 10px; /* consistent spacing between buttons */
+  flex-wrap: wrap;
   justify-content: center;
 }
-
-#unscrambledWord {
-  font-weight: bold; /* makes the text bold */
-  letter-spacing: 8px; /* adds space between letters */
-  font-size: 24px; /* optional: make it larger for clarity */
-  text-align: center; /* optional: center the word */
-  margin-top: 20px; /* optional: add space above */
+.commitBottom .fakeButton {
+  font-size: 1.5rem;
+  margin: 2px;
 }
 
-.hidden {
-  display: none;
+/*END OF COMMITMENT CARD*/
+
+/*-------------*/
+/* REVEAL CARD */
+/*-------------*/
+/* Reveal Card container */
+.revealCard {
+  /* Gradient background with vignette effect */
+  background: radial-gradient(
+    circle at center,
+    #0614b8 0%,        /* bright center */
+    #0a2b6d 90%       /* mid blue */
+  );
+  width: 300px;
+  height: 300px;
+  margin: 20px auto !important;
+  border-radius: 12px;
+  position: relative;
+  opacity: 0;
+  animation: cardFadeIn 0.8s ease forwards;
 }
 
-#quizContainer {
-  flex-direction: column; /* stack vertically */
-  align-items: center; /* center horizontally */
+/* Packshot (centered image placeholder) */
+.packshot {
+  width: 200px;
+  height: 200px;
+  background: url('packshot.png') no-repeat center center;
+  background-size: contain;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  opacity: 0;
+  animation: packshotFadeIn 0.8s ease forwards;
+  animation-delay: 0.8s; /* after card */
 }
 
-#quizContainer button {
-  background-color: #efbf04;
-  color: white;
-  font-weight: bold;
+/* Glow (larger than card) */
+.glow {
+  width: 600px;
+  height: 600px;
+  background: url('glow.png') no-repeat center center;
+  background-size: 600px 600px;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%) rotate(0deg);
+  opacity: 0;
+  animation: glowFadeIn 5s ease forwards, glowRotate 10s linear infinite;
+  animation-delay: 1.6s; /* after packshot */
+}
+
+/* Continuous rotation for glow */
+.glow.rotating {
+  animation: glowRotate 10s linear infinite;
+}
+
+/* Animations */
+@keyframes cardFadeIn {
+  from { opacity: 0; transform: translateY(20px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+@keyframes packshotFadeIn {
+  from { opacity: 0; transform: translate(-50%, -50%) scale(0.8); }
+  to   { opacity: 1; transform: translate(-50%, -50%) scale(1); }
+}
+@keyframes glowFadeIn {
+  from { opacity: 0; transform: translate(-50%, -50%) scale(0.8) rotate(0deg); }
+  to   { opacity: 1; transform: translate(-50%, -50%) scale(3) rotate(0deg); }
+}
+@keyframes glowRotate {
+  from { transform: translate(-50%, -50%) rotate(0deg); }
+  to   { transform: translate(-50%, -50%) rotate(360deg); }
+}
+
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(20px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+/* END OF REVEAL CARD */
+
+
+
+
+/* Button with press animation + ripple */
+button {
+  position: relative;
+  overflow: hidden;
+  background-color: #007BFF;
+  color: #fff;
+  border: none;
+  border-radius: 8px;
   padding: 12px 20px;
-  width: 200px; /* fixed width for consistency */
-  text-align: center;
+  font-size: 16px;
   cursor: pointer;
-  font-size: 14px;
-  transition:
-    transform 0.2s ease,
-    background-color 0.2s ease;
-  margin: 5px;
+  transition: transform 0.1s ease, box-shadow 0.2s ease, background-color 0.2s ease;
+  /*box-shadow: 0 4px 6px rgba(0,0,0,0.2);*/
+  margin-top: 20px;
 }
 
-#quizContainer button:hover {
-  background-color: #efbf04;
-  color: white;
+button:hover {
+  /*background-color: #0056b3;*/
+}
+
+button:active {
+  transform: scale(1.5);
+  box-shadow: 0 2px 4px rgba(0,0,0,0.3);
+}
+
+/* Ripple effect */
+button::after {
+  content: "";
+  position: absolute;
+  border-radius: 50%;
+  width: 100px;
+  height: 100px;
+  top: 50%;
+  left: 50%;
+  pointer-events: none;
+  background: rgba(255,255,255,0.4);
+  transform: scale(0);
+  opacity: 0;
+  transition: transform 0.4s ease, opacity 0.8s ease;
+}
+
+button:active::after {
+  transform: scale(1);
+  opacity: 1;
+  transition: 3s;
+}
+
+/* Mobile responsiveness */
+@media (max-width: 600px) {
+  .card {
+    max-width: 70vh;
+    margin: 20px;
+    padding: 15px;
+  }
+  
+  .splashCard{
+	  max-width:90%;
+  }
+
+  button {
+    font-size: 18px;
+    padding: 14px 24px;
+  }
+}
+
+/* Hidden utility */
+.hidden {
+  display: none !important;
+}
+
+.active {
+  display: flex !important;
 }

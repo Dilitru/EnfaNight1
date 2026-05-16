@@ -1,76 +1,145 @@
-
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta
-      charset="UTF-8"
-      name="viewport"
-      content="width=device-width, initial-scale=1.0"
-    />
-    <title>Quiz Game</title>
-    <link
-      href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700&display=swap"
-      rel="stylesheet"
-    />
-    <link rel="stylesheet" href="style.css" />
-  </head>
-  <body>
-    <!-- Load Firebase compat SDKs -->
-    <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-app-compat.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore-compat.js"></script>
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    <!-- Your script -->
-    <script src="script.js" defer></script>
+  <title>Quiz App Template</title>
+  <!-- Google Font Nunito -->
+  <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;700&display=swap" rel="stylesheet">
+  <!-- External CSS -->
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <!-- Logo Header -->
+  <header>
+    <img src="logo.png" alt="App Logo" height="60">
+  </header>
 
-    <!-- Event Logo -->
-    <!-- <header id="eventLogo">
-      <img src="logo.png" alt="Event Logo" />
-    </header> -->
+  <!-- SPLASH CARD -->
+  <div class="card splashCard">    
+    <!-- Image button -->
+    <button class="image-button">
+      <img src="start-button.png" alt="Start Quiz">
+    </button>
+	<p>
+	<br>Push to start</br>
+  </div>
+  
+	<!-- WAIT PAGE CARD -->
+	<div class="card waitPage">
+	  <!-- Top section with full image -->
+	  <div class="waitTop">
+		
+	  </div>
 
-    <main>
-      <!--Table and Name Entry -->
-      <section id="infoEntryPage" class="intro-card hidden">
-        <img src="DHAChallengeLogo.png" alt="App Logo" class="app-logo" />
+	  <!-- Brainflix logo overlapping both sections -->
+	  <div class="waitLogo">
+		<img src="start-button.png" alt="Brainflix Logo">
+	  </div>
 
-        <h3>Please enter your table number and name.</h3>
-        <label for="tableNumber">Table Number:</label><br />
-        <input
-          type="number"
-          id="tableNumber"
-          min="1"
-          step="1"
-          required
-        /><br /><br />
+	  <!-- Bottom section with black background -->
+	  <div class="waitBottom">
+		<p>Will you proceed based on the instructions provided?</p>
+		<button class="yesPlayButton">
+		  <img src="yes-button.png" alt="Yes Play Button">
+		</button>
+	  </div>
+	</div>
+	
+	<!------------------->
+    <!-- QUESTION CARD -->
+    <!------------------->
+	<div class="card questionCard">
+	  <!-- Top section -->
+	  <div class="questionSection">
+		<img src="start-button.png" alt="Logo" class="questionLogo">
+		<h1 class="questionText">Question will be written here</h1>
+	  </div>
 
-        <button id="nextBtn">Next</button>
-      </section>
+	  <!-- Bottom section -->
+	  <div class="answerSection">
+		<button class="answerButton yesButton">
+		  <img src="yes-button.png" alt="Yes Button">
+		</button>
+		<button class="answerButton noButton">
+		  <img src="no-button.png" alt="No Button">
+		</button>
+		<p class="answerInstruction">Please select an answer</p>
+	  </div>
+	</div>
 
-      <!-- Ready Page Card -->
-      <div id="readyPage" class="card hidden">
-        <h4>Please wait for the next instructions before proceeding</h4>
-        <button class="proceed-btn" id="proceedBtn">PROCEED</button>
-        <!-- <button id="bypass-btn" class="hidden">Bypass lock (DEMO ONLY)</button> -->
-      </div>
+    <!---------------->
+	<!-- Error Card -->
+	<!---------------->
+	<div class="card errorCard">
+	  <p class="errorMessage">
+		Please wait for the host's instructions before proceeding
+	  </p>
+	</div>
+	
+	<!--------------------------->
+	<!-- Answer Submitted Card -->
+	<!--------------------------->
+	<!-- Answer Submitted Card -->
+	<div class="card answerSubmittedCard">
+	  <!-- Top section (reuse background if needed) -->
+	  <div class="submittedTop"></div>
 
-      <!-- Question Locked Page -->
-      <div class="card hidden" id="questionLockedPage">
-        <h2>Question is not yet unlocked, please wait</h2>
-        <button id="okButton" disabled>OK (5)</button>
-      </div>
+	  <!-- Logo overlapping -->
+	  <div class="submittedLogo">
+		<img src="start-button.png" alt="Brainflix Logo">
+	  </div>
 
-      <!-- Question Page -->
-      <div class="card hidden" id="quizContainer"></div>
+	  <!-- Bottom section -->
+	  <div class="submittedBottom">
+		<p>You answer was submitted.</p>
+		<Button class="proceedButton"> Proceed </Button>
+	  </div>
+	</div>
 
-      <!-- Congrats Page -->
-      <div class="card hidden" id="congratsPage">
-        <h2>Congratulations!</h2>
-        <p>You did it! A+ Brain Control Commanders</p>
-      </div>
+    <!--------------------->
+	<!-- Commitment Card -->
+	<!--------------------->
+	<div class="card commitmentCard">
+	  <!-- Top section: fake power button -->
+	  <div class="commitTop">
+		<span class="fakeButton">⏻</span>
+	  </div>
 
-      <!--RESET button-->
-      <button id="resetBtn">
-        RESET(this button will not appear in final)
-      </button>
-    </main>
-  </body>
+	  <!-- Middle section: real commitment button -->
+	  <div class="commitMiddle">
+		<button class="commitmentYesButton">
+		  <img src="commitment-yes.png" alt="Commitment Yes Button">
+		</button>
+	  </div>
+
+	  <!-- Bottom section: fake buttons -->
+	  <div class="commitBottom">
+		<span class="fakeButton">🔊</span>
+		<span class="fakeButton">🔉</span>
+		<span class="fakeButton">⏹️</span>
+	  </div>
+	  <div class="commitBottom">
+		<span class="fakeButton">⬆️</span>
+		<span class="fakeButton">⬇️</span>
+		<span class="fakeButton">⏯️</span>
+	  </div>
+	</div>
+
+	<!----------------->
+	<!-- Reveal Card -->
+	<!----------------->
+	<!-- Reveal Card -->
+	<div class="card revealCard">
+	  <div class="glow"></div>
+	  <div class="packshot"></div>
+	  
+	</div>
+
+
+	<p style="font-size: 10px;">v051726-0125</p>
+  <!-- External JS -->
+  <script src="script.js"></script>
+</body>
 </html>
