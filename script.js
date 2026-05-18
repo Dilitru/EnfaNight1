@@ -19,7 +19,7 @@ function showCard(className) {
 // On page load: hide everything, then show splashCard
 window.addEventListener('DOMContentLoaded', () => {
   hideAllCards();
-  showCard("splashCard");
+  showCard("entranceCard");
 });
 
 // Utility: attach delayed navigation
@@ -40,3 +40,35 @@ attachDelayedNavigation('yesPlayButton', 'questionCard');
 attachDelayedNavigation('yesButton', 'answerSubmittedCard');
 attachDelayedNavigation('proceedButton', 'commitmentCard');
 attachDelayedNavigation('commitmentYesButton', 'revealCard');
+
+const brainBtn = document.querySelector('.brainButton img');
+const instruction = document.querySelector('.entranceInstruction');
+const logo = document.querySelector('.bflixLogo');
+const entranceCard = document.querySelector('.entranceCard');
+const sfx = new Audio('sfx.mp3');
+
+document.querySelector('.brainButton').addEventListener('click', () => {
+  // shrink brain
+  brainBtn.style.transform = 'scale(0)';
+  brainBtn.style.opacity = '0';
+
+  // fade out instruction
+  instruction.style.opacity = '0';
+
+  // play sound
+  sfx.play();
+
+  // after 0.5s, show logo + background
+  setTimeout(() => {
+    logo.style.opacity = '1';
+    logo.style.bottom = '50%'; // move to center
+    logo.style.transform = 'translateY(50%)';
+    entranceCard.classList.add('bgActive');
+  }, 600);
+
+  // after 4s, switch to splashCard
+  setTimeout(() => {
+    hideAllCards();
+    showCard("splashCard");
+  }, 6000);
+});

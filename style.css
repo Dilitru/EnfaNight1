@@ -26,27 +26,20 @@ header img {
 
 /* Card with fade-in */
 .card {
-  background: #04032e;
-  color: #fff;
-  border-radius: 12px;
-  box-shadow: 0 4px 8px rgba(0,0,0,0.3);
-  padding: 20px;
-  margin: 20px auto;
-  max-width: 500px;
-  opacity: 0;
   animation: fadeIn 0.8s ease forwards;
+	
 }
 
 /* Splash card with scrolling background */
 .splashCard {
   position: relative;
-  width: 50vh !important;
+  width: 350px !important;
   height: 70vh !important;           /* card height = 70% of viewport */
-  margin: 40px auto !important;
+  
   border-radius: 16px;
   box-shadow: 0 4px 8px rgba(0,0,0,0.3);
   overflow: hidden;
-
+	
   background: url('splash-background.jpg') repeat-y center top;
   background-size: cover;
 
@@ -58,6 +51,8 @@ header img {
   text-align: center;
   animation: scrollBackground 60s linear infinite,
              fadeIn 3s ease forwards;
+			 
+	margin: 0px auto;
 }
 
 /* Keyframes for infinite upward scroll */
@@ -130,6 +125,7 @@ button.image-button:active::after {
     transform: translate(-50%, -50%) scale(1.5);
   }
 }
+/* END OF CARD */
 
 /* WaitPage card container */
 .waitPage {
@@ -447,69 +443,93 @@ button.yesPlayButton:active::after {
 /*-----------------*/
 /* Commitment Card container */
 .commitmentCard {
-  background-color: #2c2c2c; /* dark grey */
-  max-width: 200px !important;          /* slim */
-  margin: 20px auto !important;
-  border-radius: 25px;
-  box-shadow: 0 4px 8px rgba(0,0,0,0.3);
+  background: linear-gradient(to bottom, #f5f5f5, #dcdcdc); /* silver-white gradient */
+  width: 200px;          /* slim remote look */
+  margin: 20px auto;
+  border-radius: 40px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.3);
   display: flex;
   flex-direction: column;
   align-items: center;
-  padding: 20px 10px;
-  color: #fff;
+  padding: 20px 20px;
+  padding-bottom: 120px;
+  color: #000;
 }
 
 /* Top section */
 .commitTop {
-  margin-bottom:0px;
+  margin-bottom: 5px;
 }
 .fakeButton {
-  font-size: 2rem;
-  margin: 0 10px;
+  font-size: 1.5rem;
   cursor: default;
 }
 
-/* Middle section: real button */
-.commitMiddle {
-  margin: 0px 0;
-  margin-bottom:60px;
-  padding: 20px;
+/* Middle section: big black circle */
+.remoteCircle {
+  background: radial-gradient(
+    circle at center,
+    #080da1 50%,   /* inner color */
+    #020438 70%  /* outer color */
+  );
+  border-radius: 50%;
+  width: 180px;
+  height: 180px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  opacity: 0px;
+}
+.commitTop{
+align-items: center;
+}
+.commitTop img{
+	max-width: 150px;
+	height: auto;
 }
 .commitmentYesButton {
   background: none;
   border: none;
   cursor: pointer;
-  width: 200px;
-  height: 200px;
-  position: relative;
+  width: 300px;
+  height: 300px;
 }
 .commitmentYesButton img {
   width: 100%;
   height: auto;
   display: block;
-  animation: none;
 }
-
 .commitmentYesButton.clicked img {
-  animation: spinGrow 0.5s ease forwards; /* adjust duration here */
+  animation: spinGrow 0.5s ease forwards;
 }
-
 @keyframes spinGrow {
   from { transform: rotate(0deg) scale(1); }
   to   { transform: rotate(360deg) scale(1.4); }
 }
 
-
-/* Bottom section */
-.commitBottom {
-  margin-top: 0px;
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: center;
+/* Bottom section: 3x2 grid of fake buttons */
+.remoteGrid {
+  display: grid;
+  grid-template-columns: repeat(2, 40px);
+  grid-template-rows: repeat(3, 40px);
+  gap: 12px;
+  margin-top: 15px;
 }
-.commitBottom .fakeButton {
-  font-size: 1.5rem;
-  margin: 2px;
+.remoteBtn {
+  background: radial-gradient(
+    circle at center,
+    #282f8f 10%,   /* inner color */
+    #0e1140	 70%  /* outer color */
+  );
+  border-radius: 50%;
+  width: 40px;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #fff;
+  font-size: 1.3rem;
+  font-weight: bold;
 }
 
 /*END OF COMMITMENT CARD*/
@@ -644,23 +664,57 @@ button:active::after {
   transition: 3s;
 }
 
-/* Mobile responsiveness */
-@media (max-width: 600px) {
-  .card {
-    max-width: 70vh;
-    margin: 20px;
-    padding: 15px;
-  }
-  
-  .splashCard{
-	  max-width:90%;
-  }
-
-  button {
-    font-size: 18px;
-    padding: 14px 24px;
-  }
+/* Entrance Card container */
+.entranceCard {
+  width: 350px;
+  height: 70vh;
+  margin: 0 auto;
+  background: #000;
+  border-radius: 16px;
+  overflow: hidden;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
 }
+
+/* Brain button */
+.brainButton {
+  background: none;
+  border: none;
+  cursor: pointer;
+}
+.brainButton img {
+  width: 150px;
+  height: 150px;
+  transition: transform 0.5s ease, opacity 0.5s ease;
+}
+
+/* Instruction text */
+.entranceInstruction {
+  color: #fff;
+  margin-top: 20px;
+  font-size: 1.2rem;
+  transition: opacity 0.5s ease;
+}
+
+/* Logo (hidden initially) */
+.bflixLogo {
+  position: absolute;
+  bottom: -50px; /* start slightly below */
+  opacity: 0;
+  width: 300px;
+  transition: all 1s ease;
+}
+
+/* Background fade-in */
+.entranceCard.bgActive {
+  background: url('background-lines.jpg') center/cover no-repeat;
+  transition: background 5s ease;
+}
+
+
 
 /* Hidden utility */
 .hidden {
