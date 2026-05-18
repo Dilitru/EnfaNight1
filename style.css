@@ -711,7 +711,7 @@ button:active::after {
 /* Background fade-in */
 .entranceCard.bgActive {
   background: url('background-lines.jpg') center/cover no-repeat;
-  transition: background 5s ease;
+  transition: scrollBackground 6s ease;
 }
 
 
