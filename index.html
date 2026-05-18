@@ -104,28 +104,34 @@
 	<div class="card commitmentCard">
 	  <!-- Top section: fake power button -->
 	  <div class="commitTop">
-		<span class="fakeButton">⏻</span>
+		<img src="brainflix_logo_2.png" alt="bflix logo">
 	  </div>
 
-	  <!-- Middle section: real commitment button -->
+	  <!-- Middle section: big black circle with real button -->
 	  <div class="commitMiddle">
-		<button class="commitmentYesButton">
-		  <img src="commitment-yes.png" alt="Commitment Yes Button">
-		</button>
+		<div class="remoteCircle">
+		  <button class="commitmentYesButton">
+			<img src="commitment-yes.png" alt="Commitment Yes Button">
+		  </button>
+		</div>
 	  </div>
 
-	  <!-- Bottom section: fake buttons -->
+	  <!-- Bottom section: 3x2 fake buttons -->
 	  <div class="commitBottom">
-		<span class="fakeButton">🔊</span>
-		<span class="fakeButton">🔉</span>
-		<span class="fakeButton">⏹️</span>
-	  </div>
-	  <div class="commitBottom">
-		<span class="fakeButton">⬆️</span>
-		<span class="fakeButton">⬇️</span>
-		<span class="fakeButton">⏯️</span>
+		<div class="remoteGrid">
+		  <div class="remoteBtn">▲</div>
+		  <div class="remoteBtn">▼</div>
+		  <div class="remoteBtn">🔊</div>
+		  <div class="remoteBtn">🔉</div>
+		  <div class="remoteBtn">+</div>
+		  <div class="remoteBtn">-</div>
+		</div>
 	  </div>
 	</div>
+
+
+	  
+
 
 	<!----------------->
 	<!-- Reveal Card -->
@@ -136,6 +142,24 @@
 	  <div class="packshot"></div>
 	  
 	</div>
+
+	<!--------------------->
+	<!-- Entrance Card -->
+	<!--------------------->
+	<div class="card entranceCard">
+	  <!-- Brain icon -->
+	  <button class="brainButton">
+		<img src="brain_icon.png" alt="Brain Icon">
+	  </button>
+
+	  <!-- Instruction -->
+	  <p class="entranceInstruction">Press the brain</p>
+
+	  <!-- Logo (hidden initially) -->
+	  <img src="bflix_logo.png" alt="Bflix Logo" class="bflixLogo">
+	</div>
+
+
 
 
 	<p style="font-size: 10px;">v051726-0125</p>
