@@ -45,7 +45,7 @@ header img {
 
   display: flex;
   flex-direction: column;
-  justify-content: center;
+  justify-content: center;																																										
   align-items: center;
   color: white;
   text-align: center;
@@ -664,7 +664,6 @@ button:active::after {
   transition: 3s;
 }
 
-/* Entrance Card container */
 .entranceCard {
   width: 350px;
   height: 70vh;
@@ -679,39 +678,68 @@ button:active::after {
   align-items: center;
 }
 
+.entranceCard {
+  width: 350px;
+  height: 70vh;
+  margin: 0 auto;
+  position: relative;
+  overflow: hidden;
+  border-radius: 16px;
+}
+
+/* Background image fills the card */
+.bgImage {
+  position: absolute;
+  top: 0; left: -100%;
+  width: 200%;
+  height: 100%;
+  object-fit: overflow;
+  z-index: 0; /* sits behind everything */
+  opacity: 0;
+}
+
+/* Foreground content sits above */
+.brainButton, .entranceInstruction, .bflixLogo {
+  position: relative;
+  z-index: 1;
+}
+
+@keyframes moveBg {
+  from { transform: translateX(0); }
+  to   { transform: translateX(-700px); }
+}
+
+
 /* Brain button */
 .brainButton {
   background: none;
   border: none;
   cursor: pointer;
+  z-index: 1;
 }
 .brainButton img {
-  width: 150px;
-  height: 150px;
+  width: 180px;
+  height: 180px;
   transition: transform 0.5s ease, opacity 0.5s ease;
 }
 
-/* Instruction text */
+/* Instruction */
 .entranceInstruction {
   color: #fff;
   margin-top: 20px;
   font-size: 1.2rem;
   transition: opacity 0.5s ease;
+  z-index: 1;
 }
 
-/* Logo (hidden initially) */
+/* Logo */
 .bflixLogo {
   position: absolute;
-  bottom: -50px; /* start slightly below */
+  bottom: -50px;
   opacity: 0;
-  width: 300px;
+  width: 330px;
   transition: all 1s ease;
-}
-
-/* Background fade-in */
-.entranceCard.bgActive {
-  background: url('background-lines.jpg') center/cover no-repeat;
-  transition: scrollBackground 6s ease;
+  z-index: 1;
 }
 
 
