@@ -35,11 +35,11 @@ function attachDelayedNavigation(className, targetId) {
 }
 
 // Bind buttons to their destinations
-attachDelayedNavigation('image-button', 'waitPage');
 attachDelayedNavigation('yesPlayButton', 'questionCard');
 attachDelayedNavigation('yesButton', 'answerSubmittedCard');
 attachDelayedNavigation('proceedButton', 'commitmentCard');
-attachDelayedNavigation('commitmentYesButton', 'revealCard');
+attachDelayedNavigation('yes_commitment_2', 'revealCard');
+attachDelayedNavigation('image-button', 'remoteCard');
 
 const brainBtn = document.querySelector('.brainButton img');
 const instruction = document.querySelector('.entranceInstruction');
@@ -93,4 +93,65 @@ document.querySelector('.brainButton').addEventListener('click', () => {
     hideAllCards();
     showCard("splashCard");
   }, 4000);
+});
+
+
+const btn = document.querySelector('.image-button');
+const btnImg = btn.querySelector('img');
+
+const pingSound = new Audio('pingSound.mp3');
+
+btn.addEventListener('click', () => {
+	pingSound.currentTime = 0; // reset to start if pressed rapidly
+pingSound.play();
+  // Grow then shrink back
+  btnImg.animate([
+    { transform: 'scale(1)' },
+    { transform: 'scale(1.2)' },
+    { transform: 'scale(1)' }
+  ], {
+    duration: 400,
+    easing: 'ease-in-out'
+  });
+
+  // Create ghost copy
+  const ghost = btnImg.cloneNode(true);
+  ghost.style.position = 'absolute';
+  ghost.style.left = '50%';
+  ghost.style.top = '50%';
+  ghost.style.transform = 'translate(-50%, -50%)';
+  ghost.style.pointerEvents = 'none';
+  ghost.style.opacity = '1';
+  btn.appendChild(ghost);
+
+  // Animate ghost upward + fade out
+  ghost.animate([
+    { transform: 'translate(-50%, -50%) scale(.5)', opacity: 1 },
+    { transform: 'translate(-50%, -150%) scale(.5)', opacity: 0 }
+  ], {
+    duration: 800,
+    easing: 'ease-out'
+  });
+
+  // Remove ghost after animation
+  setTimeout(() => ghost.remove(), 800);
+});
+
+
+// attach click handler
+document.querySelector('.yes_commitment_2').addEventListener('click', () => {
+  // play sound
+  pingSound.currentTime = 0; // reset if clicked rapidly
+  pingSound.play();
+
+  // grow then shrink animation
+  const btnImg = document.querySelector('.yes_commitment_2 img');
+  btnImg.animate([
+    { transform: 'scale(1)' },
+    { transform: 'scale(2)' },
+    { transform: 'scale(1)' }
+  ], {
+    duration: 400,
+    easing: 'ease-in-out'
+  });
 });

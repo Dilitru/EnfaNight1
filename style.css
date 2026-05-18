@@ -30,101 +30,51 @@ header img {
 	
 }
 
-/* Splash card with scrolling background */
 .splashCard {
   position: relative;
-  width: 350px !important;
-  height: 70vh !important;           /* card height = 70% of viewport */
-  
+  width: 350px;
+  height: 70vh;
+  margin: 0 auto;
   border-radius: 16px;
   box-shadow: 0 4px 8px rgba(0,0,0,0.3);
   overflow: hidden;
-	
-  background: url('splash-background.jpg') repeat-y center top;
-  background-size: cover;
+  background: url('splash-background.jpg') center/cover no-repeat;
 
   display: flex;
-  flex-direction: column;
-  justify-content: center;																																										
-  align-items: center;
+  flex-direction: column;   /* stack children vertically */
+  justify-content: center;  /* center vertically */
+  align-items: center;      /* center horizontally */
   color: white;
   text-align: center;
-  animation: scrollBackground 60s linear infinite,
-             fadeIn 3s ease forwards;
-			 
-	margin: 0px auto;
 }
 
-/* Keyframes for infinite upward scroll */
-@keyframes scrollBackground {
-  from { background-position: center 0; }
-  to   { background-position: center 2000%; } /* scroll farther */
-}
-
-/* Image button base */
+/* Image button */
 button.image-button {
-  background: none;       /* no background */
-  border: none;           /* no border */
+  background: none;
+  border: none;
   padding: 0;
-  margin-top: 20px;
+  margin: 20px 0 10px 0; /* space above and below */
   cursor: pointer;
   position: relative;
   overflow: visible;
 }
 
-/* Remove browser focus/active background */
-button.image-button:focus,
-button.image-button:active {
-  outline: none;
-  background: none;
-}
-
-/* Image itself */
 button.image-button img {
   display: block;
   margin: 0 auto;
   width: 250px;
   height: auto;
-  pointer-events: none; /* click registers on button, not image */
-}
-
-/* Transparent ghost effect */
-button.image-button::after {
-  content: "";
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  width: 100%;
-  height: 100%;
-  background: url('start-button.png') no-repeat center center;
-  background-size: contain;
-  opacity: 0;
-  transform: translate(-50%, -50%) scale(1);
   pointer-events: none;
 }
 
-/* On click: show ghost, scale up, fade out */
-button.image-button:active::after {
-  opacity: 0.5;
-  transform: translate(-50%, -50%) scale(1.2);
-  animation: fadeOutScale 0.6s forwards;
+/* Press to start text */
+.splashCard .start-text {
+  margin-top: 10px;       /* spacing below button */
+  font-size: 1.2rem;
+  font-weight: bold;
+  color: #fff;
 }
 
-/* Keyframes */
-@keyframes fadeOutScale {
-  to {
-    opacity: 0;
-    transform: translate(-50%, -50%) scale(1.5);
-  }
-}
-
-/* Keyframes for fade-out */
-@keyframes fadeOutScale {
-  to {
-    opacity: 0;
-    transform: translate(-50%, -50%) scale(1.5);
-  }
-}
 /* END OF CARD */
 
 /* WaitPage card container */
@@ -633,36 +583,7 @@ button {
   margin-top: 20px;
 }
 
-button:hover {
-  /*background-color: #0056b3;*/
-}
 
-button:active {
-  transform: scale(1.5);
-  box-shadow: 0 2px 4px rgba(0,0,0,0.3);
-}
-
-/* Ripple effect */
-button::after {
-  content: "";
-  position: absolute;
-  border-radius: 50%;
-  width: 100px;
-  height: 100px;
-  top: 50%;
-  left: 50%;
-  pointer-events: none;
-  background: rgba(255,255,255,0.4);
-  transform: scale(0);
-  opacity: 0;
-  transition: transform 0.4s ease, opacity 0.8s ease;
-}
-
-button:active::after {
-  transform: scale(1);
-  opacity: 1;
-  transition: 3s;
-}
 
 .entranceCard {
   width: 350px;
@@ -742,6 +663,35 @@ button:active::after {
   z-index: 1;
 }
 
+
+.remoteCard {
+  position: relative;
+  width: 200px;              /* adjust to match your remote PNG */
+  height: 700px;             /* adjust to match your remote PNG */
+  margin: 0 auto;
+  background: url('remote.png') no-repeat center center;
+  background-size: cover;
+  border-radius: 16px;
+  box-shadow: 0 4px 8px rgba(0,0,0,0.3);
+}
+
+/* YES commitment button positioned in the circle */
+.yes_commitment_2 {
+  position: absolute;
+  top: 38%;                  /* adjust to align with remote circle */
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background: none;
+  border: none;
+  cursor: pointer;
+  overflow: visible;
+}
+
+.yes_commitment_2 img {
+  width: 90px;               /* adjust size to fit circle */
+  height: auto;
+  display: block;
+}
 
 
 /* Hidden utility */
