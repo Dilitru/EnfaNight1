@@ -1,3 +1,4 @@
+
 const commitBtn = document.querySelector('.commitmentYesButton');
 commitBtn.addEventListener('click', () => {
   commitBtn.classList.add('clicked');
@@ -97,6 +98,11 @@ const btnImg = btn.querySelector('img');
 const pingSound = new Audio('pingSound.mp3');
 
 btn.addEventListener('click', () => {
+	if (status == "revealCard") {
+    // do nothing if not revealCard
+		showCard("revealCard");
+    return;
+  }
 	pingSound.currentTime = 0; // reset to start if pressed rapidly
 pingSound.play();
   // Grow then shrink back
@@ -202,23 +208,66 @@ document.querySelector('.yes_commitment_2').addEventListener('click', async () =
   }, 3000);
 });
 
+const firebaseConfig = {
+  apiKey: "AIzaSyCv6nPwgzTl7qDNSZ1MkpoGAOHyxpkKL4s",
+  authDomain: "quizapp-cf724.firebaseapp.com",
+  databaseURL: "https://quizapp-cf724-default-rtdb.asia-southeast1.firebasedatabase.app",
+  projectId: "quizapp-cf724",
+  storageBucket: "quizapp-cf724.firebasestorage.app",
+  messagingSenderId: "948696897116",
+  appId: "1:948696897116:web:8d8bf48e0b818ace0ef899",
+  measurementId: "G-MLNBNFC70Y"
+};
 
+// Initialize Firebase
+firebase.initializeApp(firebaseConfig);
+
+// Define Firestore globally
+const db = firebase.firestore();
+
+// Fetch status from Firestore
 async function fetchStatus() {
   try {
-    const response = await fetch("https://dilitru.github.io/EnfaNight1/state.txt?nocache=" + Date.now());
-    if (!response.ok) {
-      throw new Error("Failed to load state.txt");
+    const docRef = db.collection("status").doc("statusDoc");
+    const docSnap = await docRef.get();
+
+    if (!docSnap.exists) {
+      throw new Error("statusDoc not found");
     }
-    const text = (await response.text()).trim();
+
+    let state = (docSnap.data().state || "").trim();
 
     // foolproofing: remap commitmentCard → remoteCard
-    if (text === "commitmentCard") {
+    if (state === "commitmentCard") {
       return "remoteCard";
     }
 
-    return text; // e.g. "entranceCard", "revealCard", etc.
+    return state; // e.g. "entranceCard", "revealCard", etc.
   } catch (err) {
-    console.error("Error fetching status:", err);
+    console.error("Error fetching status from Firestore:", err);
+    return "entranceCard"; // fallback if fetch fails
+  }
+}
+
+async function fetchStatus() {
+  try {
+    const docRef = db.collection("status").doc("statusDoc");
+    const docSnap = await docRef.get();
+
+    if (!docSnap.exists) {
+      throw new Error("statusDoc not found");
+    }
+
+    let state = (docSnap.data().state || "").trim();
+
+    // foolproofing: remap commitmentCard → remoteCard
+    if (state === "commitmentCard") {
+      return "remoteCard";
+    }
+
+    return state; // e.g. "entranceCard", "revealCard", etc.
+  } catch (err) {
+    console.error("Error fetching status from Firestore:", err);
     return "entranceCard"; // fallback if fetch fails
   }
 }
