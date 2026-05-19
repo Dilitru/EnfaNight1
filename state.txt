@@ -1,1 +1,1 @@
-revealCard
+entranceCard
