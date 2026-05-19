@@ -16,11 +16,6 @@ function showCard(className) {
   if (card) card.classList.remove('hidden');
 }
 
-// On page load: hide everything, then show splashCard
-window.addEventListener('DOMContentLoaded', () => {
-  hideAllCards();
-  showCard("entranceCard");
-});
 
 // Utility: attach delayed navigation
 function attachDelayedNavigation(className, targetId) {
@@ -38,8 +33,8 @@ function attachDelayedNavigation(className, targetId) {
 attachDelayedNavigation('yesPlayButton', 'questionCard');
 attachDelayedNavigation('yesButton', 'answerSubmittedCard');
 attachDelayedNavigation('proceedButton', 'commitmentCard');
-attachDelayedNavigation('yes_commitment_2', 'revealCard');
-attachDelayedNavigation('image-button', 'remoteCard');
+//attachDelayedNavigation('yes_commitment_2', 'revealCard');
+//attachDelayedNavigation('image-button', 'remoteCard');
 
 const brainBtn = document.querySelector('.brainButton img');
 const instruction = document.querySelector('.entranceInstruction');
@@ -137,21 +132,117 @@ pingSound.play();
   setTimeout(() => ghost.remove(), 800);
 });
 
+// helper to spawn particles
+function spawnParticles(x, y, parent) {
+  for (let i = 0; i < 12; i++) {
+    const particle = document.createElement('div');
+    particle.className = 'particle';
+    parent.appendChild(particle);
 
-// attach click handler
-document.querySelector('.yes_commitment_2').addEventListener('click', () => {
+    // random angle + distance
+    const angle = Math.random() * 2 * Math.PI;
+    const distance = 40 + Math.random() * 40;
+
+    // animate outward + fade
+    particle.animate([
+      { transform: `translate(${x}px, ${y}px) scale(1)`, opacity: 1 },
+      { transform: `translate(${x + Math.cos(angle) * distance}px, ${y + Math.sin(angle) * distance}px) scale(0.5)`, opacity: 0 }
+    ], {
+      duration: 600,
+      easing: 'ease-out'
+    });
+
+    // remove after animation
+    setTimeout(() => particle.remove(), 600);
+  }
+}
+
+// preload reveal sound
+const reveal = new Audio('reveal.mp3'); // replace with your actual audio file
+
+document.querySelector('.yes_commitment_2').addEventListener('click', async () => {
+  const status = await fetchStatus(); // get current state string
+
+  if (status !== "revealCard") {
+    // do nothing if not revealCard
+	const btnImg = document.querySelector('.yes_commitment_2 img');
+	  btnImg.animate([
+		{ transform: 'scale(1)' },
+		{ transform: 'scale(2)' },
+	  ], {
+		duration: 100
+	  });
+    return;
+  }
+
   // play sound
-  pingSound.currentTime = 0; // reset if clicked rapidly
-  pingSound.play();
+  reveal.currentTime = 0;
+  reveal.play();
 
   // grow then shrink animation
   const btnImg = document.querySelector('.yes_commitment_2 img');
   btnImg.animate([
     { transform: 'scale(1)' },
     { transform: 'scale(2)' },
-    { transform: 'scale(1)' }
+    { transform: 'scale(2)' },
   ], {
-    duration: 400,
-    easing: 'ease-in-out'
+    duration: 10000
   });
+
+  // particle explosion centered on button
+  const rect = btnImg.getBoundingClientRect();
+  const x = 25;   // adjust offsets to taste
+  const y = -80;
+  spawnParticles(x, y, document.querySelector('.yes_commitment_2'));
+
+  // after 4 seconds, switch to revealCard
+  setTimeout(() => {
+	  hideAllCards();
+    showCard("revealCard");
+  }, 3000);
+});
+
+
+async function fetchStatus() {
+  try {
+    const response = await fetch("https://dilitru.github.io/EnfaNight1/state.txt?nocache=" + Date.now());
+    if (!response.ok) {
+      throw new Error("Failed to load state.txt");
+    }
+    const text = (await response.text()).trim();
+
+    // foolproofing: remap commitmentCard → remoteCard
+    if (text === "commitmentCard") {
+      return "remoteCard";
+    }
+
+    return text; // e.g. "entranceCard", "revealCard", etc.
+  } catch (err) {
+    console.error("Error fetching status:", err);
+    return "entranceCard"; // fallback if fetch fails
+  }
+}
+
+window.addEventListener('DOMContentLoaded', async () => {
+  hideAllCards();
+  const state = await fetchStatus();
+  showCard(state);
+});
+
+const splashCard = document.querySelector('.splashCard');
+
+function animateBackground() {
+  let offset = 0;
+
+  function step() {
+    offset -= 0.5; // speed of upward scroll (pixels per frame)
+    splashCard.style.backgroundPosition = `center ${offset}px`;
+    requestAnimationFrame(step);
+  }
+
+  step();
+}
+
+window.addEventListener('DOMContentLoaded', () => {
+  animateBackground();
 });
