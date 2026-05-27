@@ -33,7 +33,7 @@ function attachDelayedNavigation(className, targetId) {
 // Bind buttons to their destinations
 attachDelayedNavigation('yesPlayButton', 'questionCard');
 attachDelayedNavigation('yesButton', 'answerSubmittedCard');
-attachDelayedNavigation('proceedButton', 'commitmentCard');
+attachDelayedNavigation('proceedButton', 'remoteCard');
 //attachDelayedNavigation('yes_commitment_2', 'revealCard');
 //attachDelayedNavigation('image-button', 'remoteCard');
 
@@ -166,7 +166,7 @@ function spawnParticles(x, y, parent) {
 // preload reveal sound
 const reveal = new Audio('reveal.mp3'); // replace with your actual audio file
 
-document.querySelector('.yes_commitment_2').addEventListener('click', async () => {
+/*document.querySelector('.yes_commitment_2').addEventListener('click', async () => {
   const status = await fetchStatus(); // get current state string
 
   if (status !== "revealCard") {
@@ -206,6 +206,13 @@ document.querySelector('.yes_commitment_2').addEventListener('click', async () =
 	  hideAllCards();
     showCard("revealCard");
   }, 3000);
+});*/
+
+document.querySelector('.yes_commitment_2').addEventListener('click', async () => {
+  reveal.currentTime = 0;
+  reveal.play();
+  hideAllCards();
+  showCard("answerSubmittedCard");
 });
 
 const firebaseConfig = {

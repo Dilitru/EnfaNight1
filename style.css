@@ -675,6 +675,28 @@ button {
   box-shadow: 0 4px 8px rgba(0,0,0,0.3);
 }
 
+/* Flex row to hold the two buttons side by side */
+.buttonRow {
+  position: absolute;
+  top: 35%;                  /* adjust to where the circle is */
+  left: 50%;
+  display: block;
+  gap: 10px;                 /* spacing between buttons */
+}
+
+.buttonRow button {
+  background: none;
+  border: none;
+  cursor: pointer;
+}
+
+.buttonRow img {
+  width: 60px;               /* adjust size to fit circle */
+  height: auto;
+  display: block;
+}
+
+
 /* YES commitment button positioned in the circle */
 .yes_commitment_2 {
   position: absolute;
@@ -688,7 +710,7 @@ button {
 }
 
 .yes_commitment_2 img {
-  width: 90px;               /* adjust size to fit circle */
+  width: 150px;               /* adjust size to fit circle */
   height: auto;
   display: block;
 }
