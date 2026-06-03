@@ -31,7 +31,7 @@ function attachDelayedNavigation(className, targetId) {
 }
 
 // Bind buttons to their destinations
-attachDelayedNavigation('yesPlayButton', 'questionCard');
+attachDelayedNavigation('yesPlayButton', 'remoteCard');
 attachDelayedNavigation('yesButton', 'answerSubmittedCard');
 attachDelayedNavigation('proceedButton', 'remoteCard');
 //attachDelayedNavigation('yes_commitment_2', 'revealCard');
@@ -98,13 +98,10 @@ const btnImg = btn.querySelector('img');
 const pingSound = new Audio('pingSound.mp3');
 
 btn.addEventListener('click', () => {
-	if (status == "revealCard") {
-    // do nothing if not revealCard
-		showCard("revealCard");
-    return;
-  }
-	pingSound.currentTime = 0; // reset to start if pressed rapidly
-pingSound.play();
+
+  pingSound.currentTime = 0; // reset to start if pressed rapidly
+  pingSound.play();
+
   // Grow then shrink back
   btnImg.animate([
     { transform: 'scale(1)' },
@@ -136,7 +133,14 @@ pingSound.play();
 
   // Remove ghost after animation
   setTimeout(() => ghost.remove(), 800);
+
+  // Extra feature: after 2 seconds, hide all cards and show waitPage
+  setTimeout(() => {
+    hideAllCards();
+    showCard("waitPage");
+  }, 2000);
 });
+
 
 // helper to spawn particles
 function spawnParticles(x, y, parent) {
@@ -256,33 +260,11 @@ async function fetchStatus() {
   }
 }
 
-async function fetchStatus() {
-  try {
-    const docRef = db.collection("status").doc("statusDoc");
-    const docSnap = await docRef.get();
-
-    if (!docSnap.exists) {
-      throw new Error("statusDoc not found");
-    }
-
-    let state = (docSnap.data().state || "").trim();
-
-    // foolproofing: remap commitmentCard → remoteCard
-    if (state === "commitmentCard") {
-      return "remoteCard";
-    }
-
-    return state; // e.g. "entranceCard", "revealCard", etc.
-  } catch (err) {
-    console.error("Error fetching status from Firestore:", err);
-    return "entranceCard"; // fallback if fetch fails
-  }
-}
-
 window.addEventListener('DOMContentLoaded', async () => {
   hideAllCards();
   const state = await fetchStatus();
   showCard(state);
+  //showCard("waitPage");
 });
 
 const splashCard = document.querySelector('.splashCard');

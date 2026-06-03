@@ -79,17 +79,17 @@ button.image-button img {
 
 /* WaitPage card container */
 .waitPage {
-  position: relative;          /* allow overlap positioning */
+	margin: 20px auto;
   display: flex;
   flex-direction: column;
+  max-width: 500px !important;
   overflow: hidden;
-  max-width: 500px;
-  margin: 0px 0px 0px 0px; 
-  padding: 0px 0px 0px;
+  box-shadow: 0 4px 8px rgba(0,0,0,0.3);
+  animation: fadeIn 0.8s ease forwards;
+  padding: 0px !important;
   opacity: 0;
-  animation: fadeIn 1s ease forwards;
+  border-radius: 15px;
   background-color: transparent;
-  border-radius: 0px;
 }
 
 /* Top section: full image, no padding/border */
@@ -115,6 +115,7 @@ button.image-button img {
   max-width: 125px;
   height: auto;
   display: block;
+  opacity: 0%;
 }
 
 /* Bottom section */
@@ -127,20 +128,22 @@ button.image-button img {
 
 /* Yes Play Button */
 button.yesPlayButton {
-  background: none;
-  border: none;
-  padding: 0;
+  background-color: white;   /* solid white background */
+  color: #0A2A6C;            /* dark blue text */
+  border: 2px solid #0A2A6C; /* dark blue border for definition */
+  padding: 10px 20px;        /* spacing inside the button */
   margin-top: 20px;
   cursor: pointer;
   position: relative;
   overflow: visible;
   max-width: 400px;
+  border-radius: 6px;        /* subtle rounded corners */
+  font-weight: bold;         /* make text stand out */
 }
 
 button.yesPlayButton:focus,
 button.yesPlayButton:active {
-  outline: none;
-  background: none;
+  
 }
 
 button.yesPlayButton img {
@@ -165,7 +168,6 @@ button.yesPlayButton::after {
   left: 50%;
   width: 100%;
   height: 100%;
-  background: url('yes-button.png') no-repeat center center;
   background-size: contain;
   opacity: 0;
   transform: translate(-50%, -50%) scale(1);
