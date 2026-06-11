@@ -1,3 +1,126 @@
+/*
+debug switch
+*/
+const debug = true;
+const state = null;
+
+/*
+Initialize Firebase
+*/
+const firebaseConfig = {
+  apiKey: "AIzaSyCv6nPwgzTl7qDNSZ1MkpoGAOHyxpkKL4s",
+  authDomain: "quizapp-cf724.firebaseapp.com",
+  databaseURL: "https://quizapp-cf724-default-rtdb.asia-southeast1.firebasedatabase.app",
+  projectId: "quizapp-cf724",
+  storageBucket: "quizapp-cf724.firebasestorage.app",
+  messagingSenderId: "948696897116",
+  appId: "1:948696897116:web:8d8bf48e0b818ace0ef899",
+  measurementId: "G-MLNBNFC70Y"
+};
+
+// Initialize Firebase
+firebase.initializeApp(firebaseConfig);
+
+// Define Firestore globally
+const db = firebase.firestore();
+if(db){console.log("Firebase initiation succesful")};
+//  END OF INITILIAZE Firebase
+
+/*
+Checkpoint system
+*/
+// 1. Load the system
+window.addEventListener('DOMContentLoaded', async () => {
+  // Initialize web app
+  hideAllCards();
+
+  const storedName = localStorage.getItem('userName');
+  const storedTimestamp = localStorage.getItem('userNameTimestamp');
+
+  // Define cutoff date: June 17, 2026 6:00 PM
+  const cutoff = new Date("2026-06-17T18:00:00").getTime();
+
+  // Debug flag
+  const debug = true; // or false depending on mode
+
+  if (!storedName) {
+    showCard("nameCard");
+    return;
+  }
+
+  // Only apply cutoff check if debug is false
+  if (!debug) {
+    if (!storedTimestamp || Number(storedTimestamp) < cutoff) {
+      localStorage.removeItem('userName');
+      localStorage.removeItem('userNameTimestamp');
+      showCard("nameCard");
+      return;
+    }
+  }
+
+  // If name and valid timestamp exist (or debug mode skips cutoff) → continue
+  fetchCurrentStatusCard();
+});
+
+
+async function fetchCurrentStatusCard(){
+  hideAllCards();
+  const state = await fetchStatus();
+  showCard(state);
+  console.log(fetchRound());
+}
+
+async function fetchStatusString(){
+	const state = await fetchStatus();
+	return state;
+}
+
+
+// Fetch status from Firestore
+async function fetchStatus() {
+  try {
+    const docRef = db.collection("status").doc("statusDoc");
+    const docSnap = await docRef.get();
+
+    if (!docSnap.exists) {
+      throw new Error("statusDoc not found");
+    }
+
+    let state = (docSnap.data().state || "").trim();
+
+    // foolproofing: remap commitmentCard → remoteCard
+    if (state === "commitmentCard") {
+      return "remoteCard";
+    }
+
+    return state; // e.g. "entranceCard", "revealCard", etc.
+  } catch (err) {
+    console.error("Error fetching status from Firestore:", err);
+    return "entranceCard"; // fallback if fetch fails
+  }
+}
+//--- END OF INITIALIZE
+
+/*
+nameInput Card functions
+*/
+document.getElementById("nameSubmit").addEventListener("click", () => {
+  const input = document.getElementById("nameInput").value.trim();
+
+  if (input) {
+    // Save name and timestamp
+    localStorage.setItem("userName", input);
+    localStorage.setItem("userNameTimestamp", Date.now().toString());
+
+    // Hide all cards, then show splashCard
+    hideAllCards();
+    showCard("entranceCard");
+  } else {
+    alert("Please enter your name first.");
+  }
+});
+
+
 
 const commitBtn = document.querySelector('.commitmentYesButton');
 commitBtn.addEventListener('click', () => {
@@ -210,62 +333,14 @@ const reveal = new Audio('reveal.mp3'); // replace with your actual audio file
 	  hideAllCards();
     showCard("revealCard");
   }, 3000);
-});*/
+});
 
 document.querySelector('.yes_commitment_2').addEventListener('click', async () => {
   reveal.currentTime = 0;
   reveal.play();
   hideAllCards();
   showCard("answerSubmittedCard");
-});
-
-const firebaseConfig = {
-  apiKey: "AIzaSyCv6nPwgzTl7qDNSZ1MkpoGAOHyxpkKL4s",
-  authDomain: "quizapp-cf724.firebaseapp.com",
-  databaseURL: "https://quizapp-cf724-default-rtdb.asia-southeast1.firebasedatabase.app",
-  projectId: "quizapp-cf724",
-  storageBucket: "quizapp-cf724.firebasestorage.app",
-  messagingSenderId: "948696897116",
-  appId: "1:948696897116:web:8d8bf48e0b818ace0ef899",
-  measurementId: "G-MLNBNFC70Y"
-};
-
-// Initialize Firebase
-firebase.initializeApp(firebaseConfig);
-
-// Define Firestore globally
-const db = firebase.firestore();
-
-// Fetch status from Firestore
-async function fetchStatus() {
-  try {
-    const docRef = db.collection("status").doc("statusDoc");
-    const docSnap = await docRef.get();
-
-    if (!docSnap.exists) {
-      throw new Error("statusDoc not found");
-    }
-
-    let state = (docSnap.data().state || "").trim();
-
-    // foolproofing: remap commitmentCard → remoteCard
-    if (state === "commitmentCard") {
-      return "remoteCard";
-    }
-
-    return state; // e.g. "entranceCard", "revealCard", etc.
-  } catch (err) {
-    console.error("Error fetching status from Firestore:", err);
-    return "entranceCard"; // fallback if fetch fails
-  }
-}
-
-window.addEventListener('DOMContentLoaded', async () => {
-  hideAllCards();
-  const state = await fetchStatus();
-  showCard(state);
-  //showCard("waitPage");
-});
+});*/
 
 const splashCard = document.querySelector('.splashCard');
 
@@ -284,3 +359,107 @@ function animateBackground() {
 window.addEventListener('DOMContentLoaded', () => {
   animateBackground();
 });
+
+//--- remoteCard ---
+// Attach listeners
+document.getElementById("a-button").addEventListener("click", () => {
+  submitVote("A");
+});
+document.getElementById("b-button").addEventListener("click", () => {
+  submitVote("B");
+});
+async function submitVote(answer) {
+  try {
+    // Get userName from localStorage
+    const userName = localStorage.getItem("userName");
+    if (!userName) {
+      throw new Error("No userName found in localStorage.");
+    }
+
+    // Get current round (fetchRound may be async)
+    const round = await fetchRound();
+    if (!round) {
+      throw new Error("No round available.");
+    }
+
+    // Build doc references
+    const voteId = `${round}_${userName}`;
+    const voteRef = db.collection("submissions").doc(voteId);
+    const resultsRef = db.collection("results").doc(round);
+
+    // Check if vote doc exists
+    const doc = await voteRef.get();
+
+    if (!doc.exists) {
+      // First vote
+      await voteRef.set({ round, userName, choice: answer, timestamp: Date.now() });
+      await resultsRef.update({ [answer]: firebase.firestore.FieldValue.increment(1) });
+      console.log("Vote submitted successfully!");
+    } else {
+      const oldChoice = doc.data().choice;
+      if (oldChoice !== answer) {
+        // Change vote
+        await voteRef.update({ choice: answer, timestamp: Date.now() });
+        await resultsRef.update({
+          [oldChoice]: firebase.firestore.FieldValue.increment(-1),
+          [answer]: firebase.firestore.FieldValue.increment(1)
+        });
+        console.log("Vote updated successfully!");
+      } else {
+        console.log("Vote unchanged, no update needed.");
+      }
+    }
+  } catch (err) {
+    console.error("Error submitting vote:", err);
+    alert("There was a problem submitting your vote. Please try again.");
+  }
+}
+
+
+async function fetchRound() {
+  if (debug) {
+    let currentRound = localStorage.getItem("currentRound");
+    if (!currentRound) {
+      localStorage.setItem("currentRound", "round1");
+      currentRound = "round1";
+    }
+    return currentRound;
+  } else {
+    return await fetchStatusString();
+  }
+}
+
+function advanceRound() {
+  let currentRound = localStorage.getItem("currentRound");
+
+  if (!currentRound) {
+    currentRound = "round1";
+  }
+
+  // Extract number from "roundX"
+  const match = currentRound.match(/^round(\d+)$/);
+  if (match) {
+    const nextNum = parseInt(match[1], 10) + 1;
+    const nextRound = `round${nextNum}`;
+    localStorage.setItem("currentRound", nextRound);
+    return nextRound;
+  } else {
+    // fallback if format is wrong
+    localStorage.setItem("currentRound", "round1");
+    return "round1";
+  }
+}
+
+//--- END OF REMOTE CARD ---
+
+
+
+//--- Reset button ---
+document.getElementById("resetButton").addEventListener("click", () => {
+  localStorage.removeItem("userName");
+  localStorage.removeItem("userNameTimestamp");
+  localStorage.removeItem("currentRound");
+  alert("App has been reset.");
+  location.reload();
+});
+//END OF RESET BUTTON

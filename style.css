@@ -23,7 +23,6 @@ header img {
   display: inline-block;
 }
 
-
 /* Card with fade-in */
 .card {
   animation: fadeIn 0.8s ease forwards;
@@ -566,9 +565,6 @@ align-items: center;
 }
 /* END OF REVEAL CARD */
 
-
-
-
 /* Button with press animation + ripple */
 button {
   position: relative;
@@ -584,8 +580,6 @@ button {
   /*box-shadow: 0 4px 6px rgba(0,0,0,0.2);*/
   margin-top: 20px;
 }
-
-
 
 .entranceCard {
   width: 350px;
@@ -632,7 +626,6 @@ button {
   to   { transform: translateX(-700px); }
 }
 
-
 /* Brain button */
 .brainButton {
   background: none;
@@ -669,7 +662,7 @@ button {
 .remoteCard {
   position: relative;
   width: 200px;              /* adjust to match your remote PNG */
-  height: 700px;             /* adjust to match your remote PNG */
+  height: 600px;             /* adjust to match your remote PNG */
   margin: 0 auto;
   background: url('remote.png') no-repeat center center;
   background-size: cover;
@@ -680,43 +673,23 @@ button {
 /* Flex row to hold the two buttons side by side */
 .buttonRow {
   position: absolute;
-  top: 35%;                  /* adjust to where the circle is */
-  left: 50%;
-  display: block;
-  gap: 10px;                 /* spacing between buttons */
+  top: 33%;                  /* adjust to where the circle is */
+  left: -2%;
+  display:flex;
+  width: 200px;
 }
 
 .buttonRow button {
   background: none;
   border: none;
+  width: 1000px;
   cursor: pointer;
 }
 
 .buttonRow img {
-  width: 60px;               /* adjust size to fit circle */
+  width: 70px;               /* adjust size to fit circle */
   height: auto;
-  display: block;
 }
-
-
-/* YES commitment button positioned in the circle */
-.yes_commitment_2 {
-  position: absolute;
-  top: 38%;                  /* adjust to align with remote circle */
-  left: 50%;
-  transform: translate(-50%, -50%);
-  background: none;
-  border: none;
-  cursor: pointer;
-  overflow: visible;
-}
-
-.yes_commitment_2 img {
-  width: 150px;               /* adjust size to fit circle */
-  height: auto;
-  display: block;
-}
-
 
 /* Hidden utility */
 .hidden {
@@ -734,4 +707,39 @@ button {
   border-radius:100%;
   background: orange; /* or any color you like */
   pointer-events: none;
+}
+
+.nameCard {
+  background-color: #ffffff;   /* white background */
+  border-radius: 20px;         /* rounded corners */
+  padding: 20px;
+  max-width: 350px;
+  margin: 40px auto;
+  box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+  text-align: center;
+  color: #0A2A6C;              /* dark blue text */
+}
+
+.nameCard h2 {
+  margin-bottom: 15px;
+}
+
+.nameCard input {
+  display: block;              /* forces onto its own line */
+  width: 80%;
+  padding: 10px;
+  margin: 0 auto 15px auto;    /* spacing below input */
+  border-radius: 6px;
+  border: 1px solid #ccc;
+}
+
+.nameCard button {
+  display: block;              /* forces onto its own line */
+  margin: 0 auto;              /* center horizontally */
+  padding: 10px 20px;
+  border-radius: 6px;
+  border: none;
+  background-color: #0A2A6C;   /* dark blue background */
+  color: #fff;                 /* white text */
+  cursor: pointer;
 }

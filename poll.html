@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-firestore.js"></script>
+  <title>BRAINFLIX</title>
+  <!-- Google Font Nunito -->
+  <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;700&display=swap" rel="stylesheet">
+  
+  <title>Select Poll Results</title>
+  <style>
+    body {
+      margin: 0;
+      font-family: Arial, sans-serif;
+      background: #f0f0f0;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+    }
+
+    #selectPollCard {
+  /* Maintain 4:1 aspect ratio */
+  aspect-ratio: 4 / 1;
+
+  /* Scale relative to browser width */
+  width: 80vw;
+  max-width: 896px;   /* scaled down from 3584 */
+  max-height: 224px;  /* scaled down from 896 */
+
+  /* Centering and styling */
+  margin: auto;
+  background: rgba(255,255,255,0.95);
+  border-radius: 12px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+  text-align: center;
+  justify-content: center;
+      align-items: center;
+}
+
+
+    #selectPollCard h2 {
+      margin-bottom: 30px;
+    }
+
+    /* Button grid */
+    .button-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 20px;
+    }
+
+    .button-grid button {
+      padding: 20px;
+      font-size: 1.2rem;
+      border-radius: 8px;
+      border: none;
+      background: #007bff;
+      color: #fff;
+      cursor: pointer;
+      transition: background 0.2s ease;
+    }
+
+    .button-grid button:hover {
+      background: #0056b3;
+    }
+	
+#pollLabels {
+  display: flex;
+  justify-content: space-between;
+  width: 80%;
+  max-width: 600px;
+  margin: 10px auto;
+  font-size: 1.2rem;
+  font-weight: bold;
+}
+
+#pollBar {
+  display: flex;
+  width: 100%;
+  max-width: 600px;
+  height: 40px;
+  border: 2px solid #333;
+  margin: 10px auto;
+  border-radius: 8px;
+  overflow: hidden;
+}
+
+#barA {
+  background: blue;
+  height: 100%;
+  width: 0%;
+  transition: width 0.5s ease;
+}
+
+#barB {
+  background: gold;
+  height: 100%;
+  width: 0%;
+  transition: width 0.5s ease;
+}
+
+  </style>
+</head>
+<body>
+  <!-- Select Poll Card -->
+  <div id="selectPollCard">
+  POLL RESULT:
+  <div id="pollLabels">
+  <span id="labelA">A: 0%</span>
+  <span id="labelB">B: 0%</span>
+</div>
+
+<div id="pollBar">
+  <div id="barA"></div>
+  <div id="barB"></div>
+</div>
+
+</div>
+
+  </div>
+  
+  <!-- External JS -->
+  <script src="poll.js"></script>
+</body>
+</html>
