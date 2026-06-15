@@ -170,9 +170,10 @@
 }
 
 .question-text {
-  font-size: 1.3rem;
+  font-size: 1rem;
   font-weight: bold;
-  padding: 10px;
+  padding: 5px;
+  align:left;
 }
 
 .poll-center {
@@ -184,13 +185,9 @@ flex: 1;
 }
 
 .question-area {
-  text-align: center;
+	display: flex;
+  text-align: left;
   align-self: center;
-}
-
-.question-text {
-  font-size: 1.3rem;
-  font-weight: bold;
 }
 
 .status-area {
@@ -252,6 +249,10 @@ font-size: 0.5rem;
   margin: 5px 0;               /* spacing between buttons */
 }
 
+#qrCode{
+	height: 40px;
+	padding: 5px;
+}
 
   </style>
 </head>
@@ -277,6 +278,7 @@ font-size: 0.5rem;
 
   <div class="poll-center">
 	  <div class="question-area">
+		<img id="qrCode" src="QR_27MAY.png">
 		<div id="question-text" class="question-text">Placeholder Question Text</div>
 	  </div>
 	  <div class="status-area">

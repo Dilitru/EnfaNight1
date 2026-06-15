@@ -81,7 +81,7 @@ function listenToRound1WithTimeout(ms) {
         if (hideRespondedTimeout) clearTimeout(hideRespondedTimeout);
         hideRespondedTimeout = setTimeout(() => {
           respondedDiv.classList.add("hidden");
-        }, 5000);
+        }, 10000);
       } else {
         respondedDiv.classList.add("hidden");
       }

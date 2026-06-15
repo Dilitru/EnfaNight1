@@ -89,20 +89,18 @@ window.addEventListener('DOMContentLoaded', async () => {
 		hideAllCards();
 		console.log("REMOTECARD LOADED");
 		if (state == "round3" || state == "round4"){
-			document.getElementById("a-button").src = "a-blue.png";
-			document.getElementById("a-button").src = "a-blue.png";
+			changeButtonImage("a-button", "a-blue.png");
+			changeButtonImage("b-button", "b-blue.png");
 			document.body.style.backgroundImage = "url('background.jpg')";
 		} else {
-			document.getElementById("a-button").src = "a-green.png";
-			document.getElementById("a-button").src = "a-green.png";
+			changeButtonImage("a-button", "a-green.png");
+			changeButtonImage("b-button", "b-green.png");
 			document.body.style.backgroundImage = "url('background-green.jpg')";
 		}
         showCard("remoteCard");
         return;
       }
     }
-	
-	
 
     // Step 6: default
 	hideAllCards();
@@ -110,6 +108,12 @@ window.addEventListener('DOMContentLoaded', async () => {
   });
 });
 
+function changeButtonImage(buttonId, newSrc) {
+  const img = document.querySelector(`#${buttonId} img`);
+  if (img) {
+    img.src = newSrc;
+  }
+}
 
 async function fetchCurrentStatusCard(){
   hideAllCards();
