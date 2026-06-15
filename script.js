@@ -31,24 +31,21 @@ Checkpoint system
 */
 // 1. Load the system
 window.addEventListener('DOMContentLoaded', async () => {
-  // Initialize web app
   hideAllCards();
 
   const storedName = localStorage.getItem('userName');
   const storedTimestamp = localStorage.getItem('userNameTimestamp');
 
-  // Define cutoff date: June 17, 2026 6:00 PM
   const cutoff = new Date("2026-06-17T18:00:00").getTime();
+  const debug = true; // toggle as needed
 
-  // Debug flag
-  const debug = true; // or false depending on mode
-
+  // Step 1: Name check
   if (!storedName) {
     showCard("nameCard");
     return;
   }
 
-  // Only apply cutoff check if debug is false
+  // Step 2: Cutoff check
   if (!debug) {
     if (!storedTimestamp || Number(storedTimestamp) < cutoff) {
       localStorage.removeItem('userName');
@@ -58,8 +55,48 @@ window.addEventListener('DOMContentLoaded', async () => {
     }
   }
 
-  // If name and valid timestamp exist (or debug mode skips cutoff) → continue
-  fetchCurrentStatusCard();
+  // Step 3: Snapshot listener for remote status
+  const docRef = db.collection("status").doc("activeCardDoc");
+  docRef.onSnapshot((docSnap) => {
+    if (!docSnap.exists) {
+      console.error("results/main not found");
+      showCard("nameCard");
+      return;
+    }
+
+    let state = (docSnap.data().activeCard || "").trim();
+
+    // Step 4: foolproofing
+    if (state === "commitmentCard") {
+      state = "remoteCard";
+    }
+
+    if (state == "nameCard"){
+		hideAllCards();
+    showCard(state);
+	}
+
+    // Step 5: round logic
+    if (/^round\d+$/.test(state)) {
+      const lastAnswer = localStorage.getItem("lastAnswer");
+
+      if (lastAnswer && lastAnswer == state) {
+		  hideAllCards();
+        showCard("answerSubmittedCard");
+        return;
+      } else {
+        localStorage.setItem("activeRound", state);
+		hideAllCards();
+		console.log("REMOTECARD LOADED");
+        showCard("remoteCard");
+        return;
+      }
+    }
+
+    // Step 6: default
+	hideAllCards();
+    showCard(state);
+  });
 });
 
 
@@ -156,7 +193,7 @@ function attachDelayedNavigation(className, targetId) {
 // Bind buttons to their destinations
 attachDelayedNavigation('yesPlayButton', 'remoteCard');
 attachDelayedNavigation('yesButton', 'answerSubmittedCard');
-attachDelayedNavigation('proceedButton', 'remoteCard');
+//attachDelayedNavigation('proceedButton', 'remoteCard');
 //attachDelayedNavigation('yes_commitment_2', 'revealCard');
 //attachDelayedNavigation('image-button', 'remoteCard');
 
@@ -367,8 +404,13 @@ document.getElementById("a-button").addEventListener("click", () => {
 });
 document.getElementById("b-button").addEventListener("click", () => {
   submitVote("B");
+  
 });
+
 async function submitVote(answer) {
+	saveLatestAnswer();
+	hideAllCards();
+  showCard("answerSubmittedCard");
   try {
     // Get userName from localStorage
     const userName = localStorage.getItem("userName");
@@ -376,44 +418,31 @@ async function submitVote(answer) {
       throw new Error("No userName found in localStorage.");
     }
 
-    // Get current round (fetchRound may be async)
-    const round = await fetchRound();
-    if (!round) {
-      throw new Error("No round available.");
-    }
+    // References
+    const voteRef = db.collection("submissions").doc(userName);
+    const resultsRef = db.collection("results").doc("main");
 
-    // Build doc references
-    const voteId = `${round}_${userName}`;
-    const voteRef = db.collection("submissions").doc(voteId);
-    const resultsRef = db.collection("results").doc(round);
+    // Always write the vote (new or overwrite)
+    await voteRef.set({
+      userName,
+      choice: answer,
+      timestamp: Date.now()
+    });
 
-    // Check if vote doc exists
-    const doc = await voteRef.get();
+    // Increment the tally for the chosen answer
+    await resultsRef.update({
+      [answer]: firebase.firestore.FieldValue.increment(1),
+      latestUser: userName
+    });
 
-    if (!doc.exists) {
-      // First vote
-      await voteRef.set({ round, userName, choice: answer, timestamp: Date.now() });
-      await resultsRef.update({ [answer]: firebase.firestore.FieldValue.increment(1) });
-      console.log("Vote submitted successfully!");
-    } else {
-      const oldChoice = doc.data().choice;
-      if (oldChoice !== answer) {
-        // Change vote
-        await voteRef.update({ choice: answer, timestamp: Date.now() });
-        await resultsRef.update({
-          [oldChoice]: firebase.firestore.FieldValue.increment(-1),
-          [answer]: firebase.firestore.FieldValue.increment(1)
-        });
-        console.log("Vote updated successfully!");
-      } else {
-        console.log("Vote unchanged, no update needed.");
-      }
-    }
+    console.log("Vote submitted successfully!");
   } catch (err) {
     console.error("Error submitting vote:", err);
     alert("There was a problem submitting your vote. Please try again.");
   }
 }
+
+
 
 
 async function fetchRound() {
@@ -449,6 +478,18 @@ function advanceRound() {
     return "round1";
   }
 }
+
+function saveLatestAnswer() {
+  const activeRound = localStorage.getItem("activeRound");
+
+  if (activeRound) {
+    localStorage.setItem("lastAnswer", activeRound);
+    console.log(`Saved latestAnswer: ${activeRound}`);
+  } else {
+    console.warn("No activeRound found in localStorage.");
+  }
+}
+
 
 //--- END OF REMOTE CARD ---
 

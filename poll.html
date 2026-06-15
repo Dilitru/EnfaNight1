@@ -12,16 +12,24 @@
   <title>Select Poll Results</title>
   <style>
     body {
-      margin: 0;
-      font-family: Arial, sans-serif;
-      background: #f0f0f0;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      height: 100vh;
-    }
+  margin: 0;
+  font-family: Arial, sans-serif;
+  background: url("background-2.jpg") no-repeat center center fixed;
+  background-size: cover;
+  min-height: 100vh;
 
-    #selectPollCard {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.mainWrapper {
+  display: flex;
+  flex-direction: column;   /* stack card + button */
+  align-items: center;      /* center horizontally */
+}
+
+    .mainCard {
   /* Maintain 4:1 aspect ratio */
   aspect-ratio: 4 / 1;
 
@@ -32,7 +40,8 @@
 
   /* Centering and styling */
   margin: auto;
-  background: rgba(255,255,255,0.95);
+  padding:0px;
+  background: rgba(1, 16, 41, 1);
   border-radius: 12px;
   box-shadow: 0 4px 12px rgba(0,0,0,0.3);
   text-align: center;
@@ -41,7 +50,7 @@
 }
 
 
-    #selectPollCard h2 {
+    .mainCard h2 {
       margin-bottom: 30px;
     }
 
@@ -70,58 +79,236 @@
 #pollLabels {
   display: flex;
   justify-content: space-between;
-  width: 80%;
-  max-width: 600px;
+  width: 95%;
+  max-width: 896px;
   margin: 10px auto;
   font-size: 1.2rem;
   font-weight: bold;
+  color: white;
 }
 
 #pollBar {
   display: flex;
   width: 100%;
-  max-width: 600px;
-  height: 40px;
+  max-width: 896px;
+  height: 30px;
   border: 2px solid #333;
-  margin: 10px auto;
-  border-radius: 8px;
+  margin: 0;
+  border-radius: 12px;
   overflow: hidden;
+  background: #e0e0e0; /* subtle background */
+  box-shadow: inset 2px 2px 6px rgba(255,255,255,0.6),
+              inset -2px -2px 6px rgba(0,0,0,0.1); /* embossed effect */
 }
 
 #barA {
-  background: blue;
+  background: linear-gradient(to right, #1e3c72, #2a5298); /* blue gradient */
   height: 100%;
   width: 0%;
   transition: width 0.5s ease;
+  box-shadow: inset 1px 1px 4px rgba(255,255,255,0.4),
+              inset -1px -1px 4px rgba(0,0,0,0.4);
 }
 
 #barB {
-  background: gold;
+  background: linear-gradient(to right, #ffd700, #ffb400); /* gold gradient */
   height: 100%;
   width: 0%;
   transition: width 0.5s ease;
+  box-shadow: inset 1px 1px 4px rgba(255,255,255,0.4),
+              inset -1px -1px 4px rgba(0,0,0,0.4);
 }
+
+#pollContent {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  width: 100%;
+  max-width: 900px;
+  margin: 20px auto;
+}
+
+.poll-left, .poll-right, .poll-center {
+  flex: 1;
+  padding: 10px;
+  color:white;
+  size: 1em;
+  height: 120px;
+}
+
+.poll-left {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  padding: 10px;
+  background: url("round-images/bg-a-round1.jpg") no-repeat center center;
+  background-size: cover;   /* scale to fill */
+  border-radius: 12px;      /* optional rounded corners */
+}
+
+.poll-right {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  padding: 10px;
+  background: url("round-images/bg-b-round1.jpg") no-repeat center center;
+  background-size: cover;
+  border-radius: 12px;
+}
+
+.answer-button {
+  width: 30px;   /* adjust size */
+  height: auto;
+  display: block;
+}
+
+.answer-text {
+  margin-top: 8px;
+  font-size: 1.1rem;
+  font-weight: bold;
+}
+
+.question-text {
+  font-size: 1.3rem;
+  font-weight: bold;
+  padding: 10px;
+}
+
+.poll-center {
+flex: 1;  
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  padding: 0px;
+}
+
+.question-area {
+  text-align: center;
+  align-self: center;
+}
+
+.question-text {
+  font-size: 1.3rem;
+  font-weight: bold;
+}
+
+.status-area {
+  display: flex;
+  flex-direction: column;
+  align-items: center;   /* keep them centered horizontally */
+  justify-content: flex-start; /* anchor at the top */
+  height: 100%;          /* optional: ensures they use full div height */
+}
+
+
+.poll-status {
+  font-size: 0.5rem;
+  color: white;
+}
+
+.poll-responded {
+font-size: 0.5rem;
+  margin-top: 6px;
+  padding: 2px 5px;
+  background: white;
+  color: darkblue;
+  font-weight: bold;
+  border-radius: 6px;
+}
+
+.hidden {
+  display: none;          /* starts hidden */
+}
+
+.homeButtonDiv {
+  width: 100%;
+  text-align: center;   /* centers the button horizontally */
+  margin-top: 20px;     /* spacing below the card */
+}
+
+#homeButton {
+  background-color: white;
+  color: #0A2A6C;       /* dark blue text */
+  border: 2px solid #0A2A6C;
+  padding: 10px 20px;
+  border-radius: 8px;
+  font-weight: bold;
+  cursor: pointer;
+}
+
+#SelectCard {
+  color: white;                /* all text inside card is white */
+}
+
+#SelectCard button {
+  background-color: white;     /* white button background */
+  color: #0A2A6C;              /* dark blue button text */
+  border: 2px solid #0A2A6C;   /* optional: dark blue border */
+  padding: 10px 20px;
+  border-radius: 8px;          /* rounded corners */
+  font-weight: bold;
+  cursor: pointer;
+  margin: 5px 0;               /* spacing between buttons */
+}
+
 
   </style>
 </head>
 <body>
+<div class="mainWrapper">
   <!-- Select Poll Card -->
-  <div id="selectPollCard">
-  POLL RESULT:
-  <div id="pollLabels">
-  <span id="labelA">A: 0%</span>
-  <span id="labelB">B: 0%</span>
-</div>
-
+  <div id="ResultCard" class ="mainCard hidden">
 <div id="pollBar">
   <div id="barA"></div>
   <div id="barB"></div>
 </div>
 
+  <div id="pollLabels">
+  <span id="labelA">A: 0%</span>
+  <span id="labelB">B: 0%</span>
+  </div>
+  <p>
+  <div id="pollContent">
+  <div class="poll-left">
+    <img src="a-green.png" alt="A Button" class="answer-button" id="a-button-img">
+    <div class="answer-text" id="answer-text-a">Answer A text</div>
+  </div>
+
+  <div class="poll-center">
+	  <div class="question-area">
+		<div id="question-text" class="question-text">Placeholder Question Text</div>
+	  </div>
+	  <div class="status-area">
+		<div id="poll-status" class="poll-status">Receiving responses</div>
+		<div id="poll-responded" class="poll-responded hidden">Waiting for responses</div>
+	  </div>
+  </div>
+
+
+  <div class="poll-right">
+    <img src="b-green.png" alt="B Button" class="answer-button" id="b-button-img">
+    <div class="answer-text" id="answer-text-b">Answer B text</div>
+  </div>
 </div>
 
-  </div>
-  
+</div>
+
+	<!-- Select Question Card -->
+	<div id="SelectCard" class="mainCard">
+	  <h2>Select a Question</h2>
+	  <button id="splashCard">Opening</button>
+	  <button id="round1">Rice Question 1</button>
+	  <button id="round2">Rice Question 2</button>
+	  <button id="round3">GE Question 1</button>
+	  <button id="round4">GE Question 2</button>
+	</div>
+
+	<p>
+	<div class="homeButtonDiv">
+		<button id="homeButton">Back to Questions</button>
+	</div>
+	</p>
+</div>
   <!-- External JS -->
   <script src="poll.js"></script>
 </body>
