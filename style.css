@@ -93,7 +93,7 @@ button.image-button img {
 
 /* Top section: full image, no padding/border */
 .waitTop {
-  height: 400px; /* or use 40vh for responsive height */
+  height: 200px; /* or use 40vh for responsive height */
   background: url('wait-image.png') no-repeat center center;
   background-size: cover;   /* fills the whole area */
   margin: 0px 0px 0px 0px;
@@ -121,22 +121,22 @@ button.image-button img {
 .waitBottom {
   background: #04032e;
   color: #fff;
-  padding: 60px 20px 20px;      /* extra top padding so logo doesn’t overlap text */
+  padding: 5px 20px 20px;      /* extra top padding so logo doesn’t overlap text */
   text-align: center;
 }
 
 /* Yes Play Button */
 button.yesPlayButton {
-  background-color: white;   /* solid white background */
-  color: #0A2A6C;            /* dark blue text */
+  background-color: #ad8109;   /* solid white background */
+  color: white;            /* dark blue text */
   border: 2px solid #0A2A6C; /* dark blue border for definition */
   padding: 10px 20px;        /* spacing inside the button */
-  margin-top: 20px;
+  margin-top: 5px;
   cursor: pointer;
   position: relative;
   overflow: visible;
   max-width: 400px;
-  border-radius: 6px;        /* subtle rounded corners */
+  border-radius: 20px;        /* subtle rounded corners */
   font-weight: bold;         /* make text stand out */
 }
 
@@ -357,7 +357,7 @@ button.yesPlayButton:active::after {
 .submittedBottom {
 	background-color:transparent;
   color: #fff;
-  padding: 50px 20px 20px;
+  padding: 10px 20px 20px;
   text-align: center;
 }
 

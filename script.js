@@ -73,7 +73,7 @@ window.addEventListener('DOMContentLoaded', async () => {
 
     if (state == "nameCard"){
 		hideAllCards();
-    showCard(state);
+		showCard(state);
 	}
 
     // Step 5: round logic
@@ -88,10 +88,21 @@ window.addEventListener('DOMContentLoaded', async () => {
         localStorage.setItem("activeRound", state);
 		hideAllCards();
 		console.log("REMOTECARD LOADED");
+		if (state == "round3" || state == "round4"){
+			document.getElementById("a-button").src = "a-blue.png";
+			document.getElementById("a-button").src = "a-blue.png";
+			document.body.style.backgroundImage = "url('background.jpg')";
+		} else {
+			document.getElementById("a-button").src = "a-green.png";
+			document.getElementById("a-button").src = "a-green.png";
+			document.body.style.backgroundImage = "url('background-green.jpg')";
+		}
         showCard("remoteCard");
         return;
       }
     }
+	
+	
 
     // Step 6: default
 	hideAllCards();
