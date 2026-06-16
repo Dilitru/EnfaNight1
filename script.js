@@ -207,7 +207,7 @@ function attachDelayedNavigation(className, targetId) {
 
 // Bind buttons to their destinations
 attachDelayedNavigation('yesPlayButton', 'remoteCard');
-attachDelayedNavigation('yesButton', 'answerSubmittedCard');
+//attachDelayedNavigation('yesButton', 'answerSubmittedCard');
 //attachDelayedNavigation('proceedButton', 'remoteCard');
 //attachDelayedNavigation('yes_commitment_2', 'revealCard');
 //attachDelayedNavigation('image-button', 'remoteCard');
@@ -248,9 +248,6 @@ document.querySelector('.brainButton').addEventListener('click', () => {
 	  }
 	}
 	requestAnimationFrame(animateBg);
-
-
-	
 
   // after 0.5s, show logo
   setTimeout(() => {
@@ -423,28 +420,47 @@ document.getElementById("b-button").addEventListener("click", () => {
 });
 
 async function submitVote(answer) {
-	saveLatestAnswer();
-	hideAllCards();
-  showCard("answerSubmittedCard");
   try {
-    // Get userName from localStorage
+    // Check 1: Username exists
     const userName = localStorage.getItem("userName");
     if (!userName) {
       throw new Error("No userName found in localStorage.");
     }
 
+    // Check 2: activeCard doesn't match lastAnswer (prevent double-voting)
+    const statusSnap = await db.collection("status").doc("activeCardDoc").get();
+    if (!statusSnap.exists) {
+      throw new Error("Could not retrieve active card status.");
+    }
+    const activeCard = (statusSnap.data().activeCard || "").trim();
+    const lastAnswer = localStorage.getItem("lastAnswer");
+
+    if (activeCard === lastAnswer) {
+      console.warn("Vote already submitted for this round. Skipping.");
+	  hideAllCards();
+	  document.getElementById("answerSubmittedCardText").textContent = "You already have answered for this round.";
+      showCard("answerSubmittedCard");
+      return;
+    }
+
+    // All checks passed — proceed
+    saveLatestAnswer();
+    hideAllCards();
+	document.getElementById("answerSubmittedCardText").textContent = "Input received!";
+    showCard("answerSubmittedCard");
+
     // References
     const voteRef = db.collection("submissions").doc(userName);
     const resultsRef = db.collection("results").doc("main");
 
-    // Always write the vote (new or overwrite)
+    // Write the vote
     await voteRef.set({
       userName,
       choice: answer,
       timestamp: Date.now()
     });
 
-    // Increment the tally for the chosen answer
+    // Increment the tally
     await resultsRef.update({
       [answer]: firebase.firestore.FieldValue.increment(1),
       latestUser: userName
@@ -456,9 +472,6 @@ async function submitVote(answer) {
     alert("There was a problem submitting your vote. Please try again.");
   }
 }
-
-
-
 
 async function fetchRound() {
   if (debug) {
@@ -519,3 +532,20 @@ document.getElementById("resetButton").addEventListener("click", () => {
   location.reload();
 });
 //END OF RESET BUTTON
+
+// ANSWER SUBMITTED CARD
+const card = document.querySelector('.answerSubmittedCard');
+
+const observer = new MutationObserver(() => {
+  const isVisible = !card.classList.contains('hidden') && card.style.display !== 'none';
+  
+  if (isVisible) {
+    setTimeout(() => {
+      card.classList.add('hidden'); // or however you hide it
+      showCard("remoteCard");
+    }, 5000);
+  }
+});
+
+observer.observe(card, { attributes: true, attributeFilter: ['class', 'style'] });
+//END OF ANSWER SUBMITTED
