@@ -1,29 +1,25 @@
+
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-firestore.js"></script>
+<script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-firestore.js"></script>
+
   <title>BRAINFLIX</title>
   <!-- Google Font Nunito -->
   <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;700&display=swap" rel="stylesheet">
   <!-- External CSS -->
   <link rel="stylesheet" href="style.css">
 </head>
-
 <body>
+
   <!-- Logo Header -->
   <header>
-      <img src="logo.png" alt="App Logo" height="60">
+    <img src="logo.png" alt="App Logo" height="60">
   </header>
-
-  <!-- Name Input Card -->
-  <div class="card nameCard">
-	<h2>Enter Your Name</h2>
-	<input type="text" id="nameInput" placeholder="Your name" />
-	<button id="nameSubmit">Continue</button>
-  </div>
 
   <!-- SPLASH CARD -->
   <div class="card splashCard">    
@@ -32,11 +28,11 @@
       <img src="start-button.png" alt="Start Quiz">
     </button>
 	<p>
-	<div>Press the Brainflix logo to start</div>
+	<div>Press to start</div>
   </div>
 														
-  <!-- WAIT PAGE CARD -->
-	 <div class="card waitPage">
+	<!-- WAIT PAGE CARD -->
+	<div class="card waitPage">
 	  <!-- Top section with full image -->
 	  <div class="waitTop">
 		
@@ -54,8 +50,8 @@
 		<button class="yesPlayButton">
 		  PRESS HERE TO SHOW REMOTE
 		</button>
-	 </div>
-   </div>
+	  </div>
+	</div>
 	
 	<!------------------->
     <!-- QUESTION CARD -->
@@ -66,6 +62,7 @@
 		<img src="start-button.png" alt="Logo" class="questionLogo">
 		<h1 class="questionText">Question will be written here</h1>
 	  </div>
+
 	  <!-- Bottom section -->
 	  <div class="answerSection">
 		<button class="answerButton yesButton">
@@ -90,6 +87,7 @@
 	<!--------------------------->
 	<!-- Answer Submitted Card -->
 	<!--------------------------->
+	<!-- Answer Submitted Card -->
 	<div class="card answerSubmittedCard">
 	  <!-- Top section (reuse background if needed) -->
 	  <div class="submittedTop"></div>
@@ -100,9 +98,9 @@
 	  </div>
 
 	  <!-- Bottom section -->
-	  <div id="answerSubmittedCardText" class="submittedBottom">
-		<p>Loading...</p>
-		<!--<Button class="proceedButton"> Return to Remote </Button>-->
+	  <div class="submittedBottom">
+		<p>You answer was submitted.</p>
+		<Button class="proceedButton"> Return to Remote </Button>
 	  </div>
 	</div>
 
@@ -112,7 +110,7 @@
 	<div class="card commitmentCard">
 	  <!-- Top section: fake power button -->
 	  <div class="commitTop">
-		<!--<img src="brainflix_logo_2.png" alt="bflix logo">-->
+		<img src="brainflix_logo_2.png" alt="bflix logo">
 	  </div>
 
 	  <!-- Middle section: big black circle with real button -->
@@ -137,16 +135,22 @@
 	  </div>
 	</div>
 
+
+	  
+
+
 	<!----------------->
 	<!-- Reveal Card -->
 	<!----------------->
+	<!-- Reveal Card -->
 	<div class="card revealCard">
 	  <div class="glow"></div>
 	  <div class="packshot"></div>
+	  
 	</div>
 
 	<!--------------------->
-	<!--  Entrance Card  -->
+	<!-- Entrance Card -->
 	<!--------------------->
 	<div class="card entranceCard">
 	  <!-- Moving background image -->
@@ -168,24 +172,22 @@
 	<!------------------->
 	<!--  Remote Card  -->
 	<!------------------->
-	<div id="remoteDebugText"><h5></h5></div>
+	<!-- Remote Card -->
 	<div class="card remoteCard">
-      <div class="buttonRow">
-		<button id="a-button">
-			<img src="a-green.png" alt="a-button">
-		</button>
-		<button id="b-button">
-			<img src="b-green.png" alt="b-button">
-		</button>
-      </div>
-    </div>
+  <div class="buttonRow">
+    <!-- YES commitment button overlay -->
+    <button class="yes_commitment_2">
+      <img src="A button blue.png" alt="YES">
+    </button>
 
-	<!-- Reset Button -->
-	<button id="resetButton">Reset</button>
+  </div>
+</div>
+
+		
 
 
-	<p style="font-size: 10px;" id="debugMessage">v061126-2135</p>
-	
+
+	<p style="font-size: 10px;">v051026-0344</p>
   <!-- External JS -->
   <script src="script.js"></script>
 </body>
