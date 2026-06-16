@@ -32,12 +32,10 @@ Checkpoint system
 // 1. Load the system
 window.addEventListener('DOMContentLoaded', async () => {
   hideAllCards();
-
   const storedName = localStorage.getItem('userName');
   const storedTimestamp = localStorage.getItem('userNameTimestamp');
-
   const cutoff = new Date("2026-06-17T18:00:00").getTime();
-  const debug = true; // toggle as needed
+  const debug = true;
 
   // Step 1: Name check
   if (!storedName) {
@@ -47,65 +45,57 @@ window.addEventListener('DOMContentLoaded', async () => {
 
   // Step 2: Cutoff check
   if (!debug) {
-    if (!storedTimestamp || Number(storedTimestamp) < cutoff) {
-      localStorage.removeItem('userName');
-      localStorage.removeItem('userNameTimestamp');
-      showCard("nameCard");
+	if (!storedTimestamp || Number(storedTimestamp) < cutoff) {
+		if (!localStorage.getItem('hasReset')) {
+			localStorage.setItem('hasReset', 'true');
+			localStorage.removeItem('userName');
+			localStorage.removeItem('userNameTimestamp');
+			showCard("nameCard");
+		return;
+		}
+	}
+  }
+  
+  // Step 3: One-time fetch
+  const docRef = db.collection("status").doc("activeCardDoc");
+  const docSnap = await docRef.get();
+
+  if (!docSnap.exists) {
+    console.error("activeCardDoc not found");
+    showCard("nameCard");
+    return;
+  }
+
+  let state = (docSnap.data().activeCard || "").trim();
+
+  // Step 4: Foolproofing
+  if (state === "commitmentCard") state = "remoteCard";
+
+  if (state == "nameCard") {
+    hideAllCards();
+    showCard(state);
+    return;
+  }
+
+  // Step 5: Round logic
+  if (/^round\d+$/.test(state)) {
+    const lastAnswer = localStorage.getItem("lastAnswer");
+    if (lastAnswer && lastAnswer == state) {
+      hideAllCards();
+      showCard("answerSubmittedCard");
+      return;
+    } else {
+      localStorage.setItem("activeRound", state);
+      hideAllCards();
+      console.log("REMOTECARD LOADED");
+      showCard("remoteCard");
       return;
     }
   }
 
-  // Step 3: Snapshot listener for remote status
-  const docRef = db.collection("status").doc("activeCardDoc");
-  docRef.onSnapshot((docSnap) => {
-    if (!docSnap.exists) {
-      console.error("results/main not found");
-      showCard("nameCard");
-      return;
-    }
-
-    let state = (docSnap.data().activeCard || "").trim();
-
-    // Step 4: foolproofing
-    if (state === "commitmentCard") {
-      state = "remoteCard";
-    }
-
-    if (state == "nameCard"){
-		hideAllCards();
-		showCard(state);
-	}
-
-    // Step 5: round logic
-    if (/^round\d+$/.test(state)) {
-      const lastAnswer = localStorage.getItem("lastAnswer");
-
-      if (lastAnswer && lastAnswer == state) {
-		  hideAllCards();
-        showCard("answerSubmittedCard");
-        return;
-      } else {
-        localStorage.setItem("activeRound", state);
-		hideAllCards();
-		console.log("REMOTECARD LOADED");
-		/*if (state == "round3" || state == "round4"){
-			changeButtonImage("a-button", "a-blue.png");
-			changeButtonImage("b-button", "b-blue.png");
-			document.body.style.backgroundImage = "url('background.jpg')";
-		} else {
-			changeButtonImage("a-button", "a-green.png");
-			changeButtonImage("b-button", "b-green.png");
-			document.body.style.backgroundImage = "url('background-green.jpg')";
-		}
-        showCard("remoteCard");*/
-        return;
-      }
-    }
-
-    // Step 6: default
-	hideAllCards();
-    showCard(state);
-  });
+  // Step 6: Default
+  hideAllCards();
+  showCard(state);
 });
 
 function changeButtonImage(buttonId, newSrc) {
@@ -200,13 +190,13 @@ function attachDelayedNavigation(className, targetId) {
       setTimeout(() => {
         hideAllCards();
         showCard(targetId);
-      }, 1500); // 2s delay
+      }, 1000); // 2s delay
     });
   });
 }
 
 // Bind buttons to their destinations
-//attachDelayedNavigation('yesPlayButton', 'remoteCard');
+attachDelayedNavigation('yesPlayButton', 'remoteCard');
 //attachDelayedNavigation('yesButton', 'answerSubmittedCard');
 //attachDelayedNavigation('proceedButton', 'remoteCard');
 //attachDelayedNavigation('yes_commitment_2', 'revealCard');
@@ -435,16 +425,6 @@ async function submitVote(answer) {
     const activeCard = (statusSnap.data().activeCard || "").trim();
     const lastAnswer = localStorage.getItem("lastAnswer");
 
-	if (activeCard == "round3" || state == "round4"|| state == "round2"){
-			changeButtonImage("a-button", "a-blue.png");
-			changeButtonImage("b-button", "b-blue.png");
-			document.body.style.backgroundImage = "url('background.jpg')";
-		} else {
-			changeButtonImage("a-button", "a-green.png");
-			changeButtonImage("b-button", "b-green.png");
-			document.body.style.backgroundImage = "url('background-green.jpg')";
-		}
-
     if (activeCard === lastAnswer) {
       console.warn("Vote already submitted for this round. Skipping.");
 	  hideAllCards();
@@ -560,9 +540,3 @@ const observer = new MutationObserver(() => {
 
 observer.observe(card, { attributes: true, attributeFilter: ['class', 'style'] });
 //END OF ANSWER SUBMITTED
-
-document.getElementById("yesPlayButton").addEventListener("click", () => {
-  document.body.style.backgroundImage = "url('background-green.jpg')";
-  hideAllCards();
-  showCard("remoteCard");
-});
