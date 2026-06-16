@@ -444,8 +444,6 @@ async function submitVote(answer) {
 			changeButtonImage("b-button", "b-green.png");
 			document.body.style.backgroundImage = "url('background-green.jpg')";
 		}
-        showCard("remoteCard");
-    return;
 
     if (activeCard === lastAnswer) {
       console.warn("Vote already submitted for this round. Skipping.");
