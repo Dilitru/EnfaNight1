@@ -206,7 +206,7 @@ function attachDelayedNavigation(className, targetId) {
 }
 
 // Bind buttons to their destinations
-attachDelayedNavigation('yesPlayButton', 'remoteCard');
+//attachDelayedNavigation('yesPlayButton', 'remoteCard');
 //attachDelayedNavigation('yesButton', 'answerSubmittedCard');
 //attachDelayedNavigation('proceedButton', 'remoteCard');
 //attachDelayedNavigation('yes_commitment_2', 'revealCard');
@@ -435,6 +435,18 @@ async function submitVote(answer) {
     const activeCard = (statusSnap.data().activeCard || "").trim();
     const lastAnswer = localStorage.getItem("lastAnswer");
 
+	if (activeCard == "round3" || state == "round4"){
+			changeButtonImage("a-button", "a-blue.png");
+			changeButtonImage("b-button", "b-blue.png");
+			document.body.style.backgroundImage = "url('background.jpg')";
+		} else {
+			changeButtonImage("a-button", "a-green.png");
+			changeButtonImage("b-button", "b-green.png");
+			document.body.style.backgroundImage = "url('background-green.jpg')";
+		}
+        showCard("remoteCard");
+    return;
+
     if (activeCard === lastAnswer) {
       console.warn("Vote already submitted for this round. Skipping.");
 	  hideAllCards();
@@ -444,7 +456,8 @@ async function submitVote(answer) {
     }
 
     // All checks passed — proceed
-    saveLatestAnswer();
+    localStorage.setItem("lastAnswer", activeCard);
+	document.getElementById("debugMessage").textContent = "" + lastAnswer;
     hideAllCards();
 	document.getElementById("answerSubmittedCardText").textContent = "Input received!";
     showCard("answerSubmittedCard");
@@ -549,3 +562,9 @@ const observer = new MutationObserver(() => {
 
 observer.observe(card, { attributes: true, attributeFilter: ['class', 'style'] });
 //END OF ANSWER SUBMITTED
+
+document.getElementById("yesPlayButton").addEventListener("click", () => {
+  document.body.style.backgroundImage = "url('background-green.jpg')";
+  hideAllCards();
+  showCard("remoteCard");
+});
