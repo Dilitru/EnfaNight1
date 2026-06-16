@@ -88,7 +88,7 @@ window.addEventListener('DOMContentLoaded', async () => {
         localStorage.setItem("activeRound", state);
 		hideAllCards();
 		console.log("REMOTECARD LOADED");
-		if (state == "round3" || state == "round4"){
+		/*if (state == "round3" || state == "round4"){
 			changeButtonImage("a-button", "a-blue.png");
 			changeButtonImage("b-button", "b-blue.png");
 			document.body.style.backgroundImage = "url('background.jpg')";
@@ -97,7 +97,7 @@ window.addEventListener('DOMContentLoaded', async () => {
 			changeButtonImage("b-button", "b-green.png");
 			document.body.style.backgroundImage = "url('background-green.jpg')";
 		}
-        showCard("remoteCard");
+        showCard("remoteCard");*/
         return;
       }
     }
@@ -435,7 +435,7 @@ async function submitVote(answer) {
     const activeCard = (statusSnap.data().activeCard || "").trim();
     const lastAnswer = localStorage.getItem("lastAnswer");
 
-	if (activeCard == "round3" || state == "round4"){
+	if (activeCard == "round3" || state == "round4"|| state == "round2"){
 			changeButtonImage("a-button", "a-blue.png");
 			changeButtonImage("b-button", "b-blue.png");
 			document.body.style.backgroundImage = "url('background.jpg')";
