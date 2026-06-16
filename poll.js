@@ -137,8 +137,8 @@ async function startRound(roundName, color) {
   document.getElementById("barB").style.width = "0%";
 
   // Switch button images depending on color
-  document.getElementById("a-button-img").src = `a-${color}.png`;
-  document.getElementById("b-button-img").src = `b-${color}.png`;
+  //document.getElementById("a-button-img").src = `a-${color}.png`;
+  //document.getElementById("b-button-img").src = `b-${color}.png`;
 
   // Change background images based on round
   document.querySelector(".poll-left").style.backgroundImage = `url('round-images/bg-a-${roundName}.jpg')`;
