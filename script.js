@@ -438,6 +438,8 @@ async function submitVote(answer) {
 	document.getElementById("debugMessage").textContent = "" + lastAnswer;
     hideAllCards();
 	document.getElementById("answerSubmittedCardText").textContent = "Input received!";
+	reveal.currentTime = 0;
+	reveal.play();
     showCard("answerSubmittedCard");
 
     // References
@@ -529,7 +531,6 @@ const card = document.querySelector('.answerSubmittedCard');
 
 const observer = new MutationObserver(() => {
   const isVisible = !card.classList.contains('hidden') && card.style.display !== 'none';
-  
   if (isVisible) {
     setTimeout(() => {
       card.classList.add('hidden'); // or however you hide it
