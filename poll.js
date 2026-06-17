@@ -137,12 +137,22 @@ async function startRound(roundName, color) {
   document.getElementById("barB").style.width = "0%";
 
   // Switch button images depending on color
-  //document.getElementById("a-button-img").src = `a-${color}.png`;
-  //document.getElementById("b-button-img").src = `b-${color}.png`;
+  document.getElementById("a-button-img").src = `a-${color}.png`;
+  document.getElementById("b-button-img").src = `b-${color}.png`;
 
   // Change background images based on round
   document.querySelector(".poll-left").style.backgroundImage = `url('round-images/bg-a-${roundName}.jpg')`;
   document.querySelector(".poll-right").style.backgroundImage = `url('round-images/bg-b-${roundName}.jpg')`;
+
+	if (color === 'green') {
+		document.getElementById('ResultCard').style.backgroundColor = '#003803';
+	}
+	
+	if (color === "green") {
+  document.getElementById('barA').style.background = 'linear-gradient(to right, #056e00, #0cba04)';
+} else {
+  document.getElementById('barA').style.background = 'linear-gradient(to right, #060e80, #000dbf)';
+}
 
   // Question/answer arrays
   const questions = {
@@ -153,7 +163,7 @@ async function startRound(roundName, color) {
   };
 
   const answers = {
-    round1: { A: "Lactose \n Intolerance", B: "CMPA" },
+    round1: { A: "Lactose \n Intolerance", B: "Cow's Milk Protein Allergy (CMPA)" },
     round2: { A: "Continue with the current milk", B: "Go to the pediatrician to assess the right milk formula" },
     round3: { A: "Digestive discomforts such as excessive crying, gassiness and hard stools ARE NOT COMMON", B: "Digestive discomforts such as excessive crying, gassiness and hard stools ARE COMMON" },
     round4: { A: "Seek the help of the Pediatrician", B: "Continue the regular milk knowing that the transition is normal" }
@@ -205,8 +215,10 @@ try {
 });
 
 document.getElementById("homeButton").addEventListener("click", () => {
+	document.getElementById('ResultCard').style.backgroundColor = 'rgba(1, 16, 41, 1)';
   document.getElementById("SelectCard").classList.remove("hidden");
   document.getElementById("ResultCard").classList.add("hidden");
+  
 });
 
 

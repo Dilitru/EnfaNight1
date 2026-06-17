@@ -141,16 +141,18 @@
   display: flex;
   flex-direction: column;
   align-items: flex-start;
+  text-align: center;
   padding: 10px;
   background: url("round-images/bg-a-round1.jpg") no-repeat center center;
-  background-size: cover;   /* scale to fill */
-  border-radius: 12px;      /* optional rounded corners */
+  background-size: cover;
+  border-radius: 12px;
 }
 
 .poll-right {
   display: flex;
   flex-direction: column;
   align-items: flex-end;
+  text-align: center;
   padding: 10px;
   background: url("round-images/bg-b-round1.jpg") no-repeat center center;
   background-size: cover;
@@ -167,26 +169,28 @@
   margin-top: 8px;
   font-size: 1.1rem;
   font-weight: bold;
+  width: 100%;
+  text-align: center;
 }
 
 .question-text {
   font-size: 1rem;
   font-weight: bold;
-  padding: 5px;
+  padding: 0px;
   align:left;
 }
 
 .poll-center {
 flex: 1;  
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
+  display: block;
+  flex-direction: row;
+  justify-content: center;
   padding: 0px;
 }
 
 .question-area {
-	display: flex;
-  text-align: left;
+	display: block;
+  text-align: center;
   align-self: center;
 }
 
@@ -250,8 +254,8 @@ font-size: 0.5rem;
 }
 
 #qrCode{
-	height: 40px;
-	padding: 5px;
+	height: 60px;
+	padding: 1px;
 }
 
   </style>
