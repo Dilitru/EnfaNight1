@@ -1,7 +1,7 @@
 /*
 debug switch
 */
-const debug = true;
+const debug = false;
 const state = null;
 
 /*
@@ -43,18 +43,6 @@ window.addEventListener('DOMContentLoaded', async () => {
     return;
   }
 
-  // Step 2: Cutoff check
-  if (!debug) {
-	if (!storedTimestamp || Number(storedTimestamp) < cutoff) {
-		if (!localStorage.getItem('hasReset')) {
-			localStorage.setItem('hasReset', 'true');
-			localStorage.removeItem('userName');
-			localStorage.removeItem('userNameTimestamp');
-			showCard("nameCard");
-		return;
-		}
-	}
-  }
   
   // Step 3: One-time fetch
   const docRef = db.collection("status").doc("activeCardDoc");
