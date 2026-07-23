@@ -1,7 +1,7 @@
 /*
 debug switch
 */
-const debug = true;
+const debug = false;
 const state = null;
 
 /*
