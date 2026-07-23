@@ -43,8 +43,8 @@ function listenToRound1WithTimeout(ms) {
 		if (roundNameGlobal == "round1" && bVotes >= aVotes) {
           aVotes = bVotes + 1;
         }
-		if (roundNameGlobal == "round2" && aVotes >= bVotes) {
-          bVotes = aVotes + 1;
+		if (roundNameGlobal == "round2" && bVotes >= aVotes) {
+          aVotes = bVotes + 1;
         }if (roundNameGlobal == "round5" && bVotes >= aVotes) {
           aVotes = bVotes + 1;
         }
