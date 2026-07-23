@@ -40,6 +40,14 @@ function listenToRound1WithTimeout(ms) {
         if (roundNameGlobal == "round4" && bVotes >= aVotes) {
           aVotes = bVotes + 1;
         }
+		if (roundNameGlobal == "round1" && bVotes >= aVotes) {
+          aVotes = bVotes + 1;
+        }
+		if (roundNameGlobal == "round2" && aVotes >= bVotes) {
+          bVotes = aVotes + 1;
+        }if (roundNameGlobal == "round5" && bVotes >= aVotes) {
+          aVotes = bVotes + 1;
+        }
       }
 	  console.log("Round: " + roundNameGlobal);
 	  console.log("A: " + aVotes + "| B: " + bVotes); 
@@ -144,6 +152,7 @@ async function startRound(roundName, color) {
   document.querySelector(".poll-left").style.backgroundImage = `url('round-images/bg-a-${roundName}.jpg')`;
   document.querySelector(".poll-right").style.backgroundImage = `url('round-images/bg-b-${roundName}.jpg')`;
 
+/*
 	if (color === 'green') {
 		document.getElementById('ResultCard').style.backgroundColor = '#003803';
 	}
@@ -153,20 +162,23 @@ async function startRound(roundName, color) {
 } else {
   document.getElementById('barA').style.background = 'linear-gradient(to right, #060e80, #000dbf)';
 }
+*/
 
   // Question/answer arrays
   const questions = {
-    round1: "What is Ryza's case?",
-    round2: "What can you advise our parents?",
+    round1: "Based on what parents typically share with you, how do children usually respond in cases like this?",
+    round2: "What is the best course of action that you would recommend the mom to do?",
     round3: "How familiar is this scenario in your practice?",
-    round4: "What should the parents do?"
+    round4: "What should the parents do?",
+    round5: "What interventions do you think should be given to the child?"
   };
 
   const answers = {
-    round1: { A: "Lactose \n Intolerance", B: "Cow's Milk Protein Allergy (CMPA)" },
-    round2: { A: "Continue with the current milk", B: "Go to the pediatrician to assess the right milk formula" },
+    round1: { A: "Ignore parents and continue watching on their tablet", B: "Child gets irritated or dysregulated" },
+    round2: { A: "Mom takes the child to the pediatrician", B: "Mom experiments with more social interactions for her child" },
     round3: { A: "Digestive discomforts such as excessive crying, gassiness and hard stools ARE NOT COMMON", B: "Digestive discomforts such as excessive crying, gassiness and hard stools ARE COMMON" },
-    round4: { A: "Seek the help of the Pediatrician", B: "Continue the regular milk knowing that the transition is normal" }
+    round4: { A: "Seek the help of the Pediatrician", B: "Continue the regular milk knowing that the transition is normal" },
+    round5: { A: "Non-Pharmacologic Interventions", B: "Pharmacologic Interventions" }
   };
 
   // Update question and answers
@@ -204,7 +216,7 @@ try {
 }
 
 // Attach listeners automatically
-["round1", "round2", "round3", "round4"].forEach(id => {
+["round1", "round2", "round3", "round4", "round5"].forEach(id => {
   const btn = document.getElementById(id);
   btn.addEventListener("click", () => {
     // roundName comes directly from the button’s ID
