@@ -40,6 +40,9 @@ function listenToRound1WithTimeout(ms) {
         if (roundNameGlobal == "round4" && bVotes >= aVotes) {
           aVotes = bVotes + 1;
         }
+		if (roundNameGlobal == "round2" && aVotes >= bVotes) {
+          bVotes = aVotes + 1;
+        }
       }
 	  console.log("Round: " + roundNameGlobal);
 	  console.log("A: " + aVotes + "| B: " + bVotes); 
