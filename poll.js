@@ -203,7 +203,7 @@ try {
     console.error("Error setting activeCard:", err);
   }
   roundNameGlobal = roundName;
-  listenToRound1WithTimeout(60000);
+  listenToRound1WithTimeout(40000);
 }
 
 // Attach listeners automatically
