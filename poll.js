@@ -228,7 +228,7 @@ try {
   roundNameGlobal = roundName;
 
   // Subtract the time the writes took so the poll closes 40s after the click
-  const remaining = Math.max(0, 40000 - (Date.now() - startedAt));
+  const remaining = Math.max(0, 120000 - (Date.now() - startedAt));
   listenToRound1WithTimeout(remaining);
 }
 
