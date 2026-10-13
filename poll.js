@@ -1,5 +1,5 @@
 // poll.js
-// Firestore snapshot listener for results/round1 with timeout
+// Firestore snapshot listener for results/main with timeout
 const firebaseConfig = {
 	  apiKey: "AIzaSyCv6nPwgzTl7qDNSZ1MkpoGAOHyxpkKL4s",
 	  authDomain: "quizapp-cf724.firebaseapp.com",
@@ -15,17 +15,35 @@ const firebaseConfig = {
 
 
 /**
- * Listen to round1 results with a time limit
+ * Listen to round results with a time limit
  * @param {number} ms - duration in milliseconds before unsubscribing
  */
 let hideRespondedTimeout; // declare outside listener
 let roundTimeout; // global tracker
+let unsubscribeRound = null; // global tracker for the active snapshot listener
 let roundNameGlobal = ""; //round global
 
+function stopListening() {
+  if (roundTimeout) {
+    clearTimeout(roundTimeout);
+    roundTimeout = null;
+  }
+  if (unsubscribeRound) {
+    unsubscribeRound();
+    unsubscribeRound = null;
+  }
+}
+
 function listenToRound1WithTimeout(ms) {
+  // Kill any previous listener + timer before starting a new one
+  stopListening();
+
   const round1Ref = db.collection("results").doc("main");
 
-  const unsubscribe = round1Ref.onSnapshot((docSnap) => {
+  const myUnsubscribe = round1Ref.onSnapshot((docSnap) => {
+    // Ignore callbacks from a listener that is no longer the active one
+    if (unsubscribeRound !== myUnsubscribe) return;
+
     if (docSnap.exists) {
       const data = docSnap.data();
       let aVotes = data.A || 0;
@@ -34,18 +52,17 @@ function listenToRound1WithTimeout(ms) {
       // --- Round tweaks ---
       if (aVotes > 0 || bVotes > 0) {
         if (roundNameGlobal == "round3" && aVotes >= bVotes) {
-			
           bVotes = aVotes + 1;
         }
         if (roundNameGlobal == "round4" && bVotes >= aVotes) {
           aVotes = bVotes + 1;
         }
-		if (roundNameGlobal == "round2" && aVotes >= bVotes) {
+        if (roundNameGlobal == "round2" && aVotes >= bVotes) {
           bVotes = aVotes + 1;
         }
       }
-	  console.log("Round: " + roundNameGlobal);
-	  console.log("A: " + aVotes + "| B: " + bVotes); 
+      console.log("Round: " + roundNameGlobal);
+      console.log("A: " + aVotes + "| B: " + bVotes);
 
       const total = aVotes + bVotes;
 
@@ -93,15 +110,16 @@ function listenToRound1WithTimeout(ms) {
     }
   });
 
+  unsubscribeRound = myUnsubscribe;
+
   // --- Resettable timer ---
-  if (roundTimeout) clearTimeout(roundTimeout);
   roundTimeout = setTimeout(() => {
     const statusDiv = document.querySelector(".poll-status");
     if (statusDiv) {
       statusDiv.textContent = "Poll closed";
     }
-    unsubscribe();
-    console.log("Stopped listening to round1 after", ms, "ms");
+    stopListening();
+    console.log("Stopped listening after", ms, "ms");
   }, ms);
 }
 
@@ -129,6 +147,11 @@ ROUND BUTTONS
 */
 // Universal round starter
 async function startRound(roundName, color) {
+  const startedAt = Date.now(); // click time, used to make the 40s exact
+
+  // Stop the previous round's listener/timer right away
+  stopListening();
+
   // Hide SelectCard, show ResultCard
   document.getElementById("SelectCard").classList.add("hidden");
   document.getElementById("ResultCard").classList.remove("hidden");
@@ -203,7 +226,10 @@ try {
     console.error("Error setting activeCard:", err);
   }
   roundNameGlobal = roundName;
-  listenToRound1WithTimeout(40000);
+
+  // Subtract the time the writes took so the poll closes 40s after the click
+  const remaining = Math.max(0, 40000 - (Date.now() - startedAt));
+  listenToRound1WithTimeout(remaining);
 }
 
 // Attach listeners automatically
@@ -223,5 +249,3 @@ document.getElementById("homeButton").addEventListener("click", () => {
   document.getElementById("ResultCard").classList.add("hidden");
   
 });
-
-
